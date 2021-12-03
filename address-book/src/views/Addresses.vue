@@ -54,12 +54,11 @@ export default {
   },
   beforeRouteUpdate(to, from, next) {
     const addresses = this.$store.getters.getAddressesByLabel(to.params.label_id)
-    if (addresses.length != 0) {
-      this.addresses = addresses
-    }
-    else {
-      if (!to.params.label_id) {
-        this.addresses = this.$store.state.addresses
+    if (!to.params.label_id) {
+      this.addresses = this.$store.state.addresses
+    } else {
+      if (addresses.length != 0) {
+        this.addresses = addresses
       } else {
         this.addresses = []
       }
