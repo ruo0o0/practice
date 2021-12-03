@@ -51,12 +51,12 @@ import { mapActions } from 'vuex'
 export default {
   created () {
     const addresses = this.$store.getters.getAddressesByLabel(this.$route.params.label_id)
-    if (addresses) {
-      this.addresses = addresses
-    }
-    else {
+    // if (addresses) {
+    //   this.addresses = addresses
+    // }
+    // else {
       this.addresses = this.$store.state.addresses
-    }
+    // }
   },
   data() {
     return {
