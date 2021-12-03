@@ -15,7 +15,7 @@ const routes = [
     component: Home
   },
   {
-    path: '/:label_id?/addresses',
+    path: '/addresses/:label_id?',
     name: 'addresses',
     component: Addresses,
   },

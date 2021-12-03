@@ -50,13 +50,21 @@
 import { mapActions } from 'vuex'
 export default {
   created () {
-    const addresses = this.$store.getters.getAddressesByLabel(this.$route.params.label_id)
-    // if (addresses) {
-    //   this.addresses = addresses
-    // }
-    // else {
       this.addresses = this.$store.state.addresses
-    // }
+  },
+  beforeRouteUpdate(to, from, next) {
+    const addresses = this.$store.getters.getAddressesByLabel(to.params.label_id)
+    if (addresses.length != 0) {
+      this.addresses = addresses
+    }
+    else {
+      if (!to.params.label_id) {
+        this.addresses = this.$store.state.addresses
+      } else {
+        this.addresses = []
+      }
+    }
+    next()
   },
   data() {
     return {
@@ -69,7 +77,7 @@ export default {
         {text: '住所', value: 'address'},
         {text: '操作', value: 'action', sortable: false}
       ],
-      addresses: []
+      addresses: [],
     }
   },
   methods: {

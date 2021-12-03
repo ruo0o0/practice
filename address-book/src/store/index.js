@@ -115,6 +115,6 @@ export default new Vuex.Store({
     photoURL: state => state.login_user ? state.login_user.photoURL : '',
     uid: state => state.login_user ? state.login_user.uid : null,
     getAddressById: state => id => state.addresses.find(address => address.id === id),
-    getAddressesByLabel: state => label_id => state.addresses.filter(address => address.label_id === label_id)
+    getAddressesByLabel: state => id => state.addresses.filter(address => address.label_id === id)
   }
 })

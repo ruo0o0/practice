@@ -45,12 +45,17 @@ import { mapActions } from 'vuex'
       this.labels = this.$store.state.labels
       const address = this.$store.getters.getAddressById(this.$route.params.address_id)
       if (address) {
-      this.address = address
+        this.address = address
       }
+      for (let i = 0; i < this.labels.length; i++) {
+        this.label_ids.push(this.labels[i].id);
+      }
+      this.selectedItem = this.label_ids.indexOf(this.address.label_id)
     },
     data: () => ({
-      selectedItem: 0,
+      selectedItem: null,
       labels: [],
+      label_ids: [],
       address: {},
     }),
     methods: {
