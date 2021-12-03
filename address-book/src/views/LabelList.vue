@@ -9,6 +9,9 @@
           class="mx-auto"
           tile
         >
+          <v-card-text  class="text-center" v-show="labels.length === 0">
+            <p>メニューからラベルを作成してください</p>
+          </v-card-text>
           <v-list>
             <v-list-item-group
               color="primary"
@@ -30,7 +33,7 @@
           </v-list>
           <div class="text-center">
             <v-btn @click="$router.push({ name: 'addresses' })">キャンセル</v-btn>
-            <v-btn color="info" class="ml-2" @click="submit">保存</v-btn>
+            <v-btn color="info" class="ml-2" @click="submit" v-show="labels.length !== 0">保存</v-btn>
           </div>
         </v-card>
       </v-flex>
