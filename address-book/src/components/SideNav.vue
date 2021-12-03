@@ -36,7 +36,7 @@
                 {{ child.title }}
             </v-list-item-content>
             <v-list-item-icon>
-              <v-icon small @click="deleteConfirm(child.id)">mdi-delete</v-icon>
+              <v-icon small @click.prevent="deleteConfirm(child.id)">mdi-delete</v-icon>
             </v-list-item-icon>
           </v-list-item>
           <v-list-item class="pl-12" @click.stop="overlay">

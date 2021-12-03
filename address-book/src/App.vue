@@ -54,7 +54,7 @@ export default {
   mounted () {
     setTimeout(() => {
       this.loading = false;
-    }, 2500);
+    }, 3000);
   },
   data () {
     return {
