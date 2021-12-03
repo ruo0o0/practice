@@ -33,6 +33,10 @@ export default new Vuex.Store({
       const index = state.addresses.findIndex( address => address.id === id)
       state.addresses.splice(index, 1)
     },
+    deleteAttachedLabel (state, {id, address}) {
+      const index = state.addresses.findIndex(address => address.id === id)
+      state.addresses[index] = address
+    },
     overlay (state) {
       state.overlay = !state.overlay
       state.drawer = false
@@ -86,6 +90,13 @@ export default new Vuex.Store({
       if (getters.uid) {
         firebase.firestore().collection(`users/${getters.uid}/addresses`).doc(id).delete().then(() => {
         commit('deleteAddress', { id })
+        })
+      }
+    },
+    deleteAttachedLabel ({ getters, commit }, {id, address}) {
+      if (getters.uid) {
+        firebase.firestore().collection(`users/${getters.uid}/addresses`).doc(id).update({label_id: firebase.firestore.FieldValue.delete()}).then(() => {
+          commit('deleteAttachedLabel', {id, address})
         })
       }
     },

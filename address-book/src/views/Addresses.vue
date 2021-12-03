@@ -50,7 +50,7 @@
 import { mapActions } from 'vuex'
 export default {
   created () {
-      this.addresses = this.$store.state.addresses
+    this.addresses = this.$store.state.addresses
   },
   beforeRouteUpdate(to, from, next) {
     const addresses = this.$store.getters.getAddressesByLabel(to.params.label_id)

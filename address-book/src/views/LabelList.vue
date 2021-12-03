@@ -17,7 +17,7 @@
               <v-list-item
                 v-for="(label, i) in labels"
                 :key="i"
-                @click="$set(address, 'label_id', `${label.id}`)"
+                @click="select(label, i)"
               >
                 <v-list-item-icon>
                   <v-icon>mdi-label-outline</v-icon>
@@ -51,20 +51,42 @@ import { mapActions } from 'vuex'
         this.label_ids.push(this.labels[i].id);
       }
       this.selectedItem = this.label_ids.indexOf(this.address.label_id)
+      const array = new Array(this.labels.length).fill(false)
+      array[this.selectedItem] = true
+      this.itemSelected = array
+      console.log(this.itemSelected)
     },
     data: () => ({
       selectedItem: null,
       labels: [],
       label_ids: [],
       address: {},
+      itemSelected: [],
     }),
     methods: {
       submit () {
-        this.updateAddress({ id: this.$route.params.address_id, address: this.address })
-        this.$router.push({ name: 'addresses' })
-        this.address = {}
+        if (this.itemSelected.includes(true)) {
+          this.updateAddress({ id: this.$route.params.address_id, address: this.address })
+          this.$router.push({ name: 'addresses' })
+          this.address = {}
+        } else {
+          this.deleteAttachedLabel({ id: this.$route.params.address_id, address: this.address })
+          this.$router.push({ name: 'addresses' })
+          this.address = {}
+        }
       },
-      ...mapActions(['updateAddress'])
+      select (label, i) {
+        this.itemSelected[i] = !this.itemSelected[i]
+        this.itemSelected.fill(false, i+1)
+        this.itemSelected.fill(false, 0, i)
+        console.log(this.itemSelected)
+        if (this.itemSelected[i]) {
+          this.$set(this.address, 'label_id', `${label.id}`)
+        } else {
+          delete this.address.label_id
+        }
+      },
+      ...mapActions(['updateAddress', 'deleteAttachedLabel'])
     }
   }
 </script>
