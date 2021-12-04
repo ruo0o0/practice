@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <v-overlay :dark="false" v-model="$store.state.overlay">
+      <CreateLabel></CreateLabel>
+    </v-overlay>
     <v-layout row wrap justify-center>
       <v-flex xs12 class="text-center">
         <h1>ラベル編集</h1>
@@ -9,9 +12,15 @@
           class="mx-auto"
           tile
         >
-          <v-card-text  class="text-center" v-show="labels.length === 0">
-            <p>メニューからラベルを作成してください</p>
-          </v-card-text>
+          <v-list>
+            <v-list-item-group>
+              <v-list-item  @click.stop="overlay" class="text-center" v-show="labels.length === 0">
+                <v-list-item-content>
+                  <v-list-item-title>ラベルを作成してください</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
           <v-list>
             <v-list-item-group
               color="primary"
@@ -43,7 +52,11 @@
 
 <script>
 import { mapActions } from 'vuex'
+import CreateLabel from '../components/CreateLabel.vue'
   export default {
+    components: {
+      CreateLabel
+    },
     created () {
       this.labels = this.$store.state.labels
       const address = this.$store.getters.getAddressById(this.$route.params.address_id)
@@ -89,7 +102,7 @@ import { mapActions } from 'vuex'
           delete this.address.label_id
         }
       },
-      ...mapActions(['updateAddress', 'deleteAttachedLabel'])
+      ...mapActions(['updateAddress', 'deleteAttachedLabel','overlay'])
     }
   }
 </script>
