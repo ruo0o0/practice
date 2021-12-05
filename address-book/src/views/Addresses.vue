@@ -19,8 +19,6 @@
          :items="addresses"
          :search="search"
          class="elevation-1"
-         :loading="loading"
-         loading-text="Loading... Please wait"
         >
           <template v-slot:item.action="{item}">
             <router-link :to="{name: 'address_edit', params: { address_id: item.id }}">
