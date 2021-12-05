@@ -32,13 +32,16 @@ export default {
     if (address) {
       this.address = address
     }
-    // else {
-    //   this.$router.push({ name: 'addresses' })
-    // }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.prevRoute = from
+      console.log(vm.prevRoute)
+    })
   },
   data () {
     return {
-      address: {}
+      address: {},
     }
   },
   methods: {

@@ -22,12 +22,6 @@
          :loading="loading"
          loading-text="Loading... Please wait"
         >
-          <!-- <template v-slot:items="props">
-            <td class="text-xs-left">{{ props.item.name }}</td>
-            <td class="text-xs-left">{{ props.item.tel }}</td>
-            <td class="text-xs-left">{{ props.item.email }}</td>
-            <td class="text-xs-left">{{ props.item.address }}</td>
-          </template> -->
           <template v-slot:item.action="{item}">
             <router-link :to="{name: 'address_edit', params: { address_id: item.id }}">
               <v-icon small class="mr-4">mdi-pencil</v-icon>
