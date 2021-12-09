@@ -2,7 +2,7 @@
   <v-container text-center justify-center>
     <v-layout row wrap>
       <v-flex xs12 mt-14>
-        <h1>Comparative Music</h1>
+        <h1>Musaic</h1>
         <p>ご利用の方はGoogleアカウントでログインしてください</p>
       </v-flex>
 
@@ -14,7 +14,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
   export default {
-    name: 'Home',
+    methods: {
+      ...mapActions(['login'])
+    }
   }
 </script>

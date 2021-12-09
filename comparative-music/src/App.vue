@@ -3,20 +3,23 @@
     <header>
       <v-app-bar app color="#121212" flat>
         <v-avatar size="30">
-          <img src="https://avatars2.githubusercontent.com/u/1363954?s=460&v=4">
+          <img :src="photoURL">
         </v-avatar>
         <v-toolbar-title>
-          Comparative Music
+          Musaic
         </v-toolbar-title>
-        <v-tabs>
+        <v-toolbar-items v-if="$store.state.login_user">
+          <v-btn text @click="logout">Logout</v-btn>
+        </v-toolbar-items>
+        <v-tabs v-if="$store.state.login_user">
           <v-tab>Home</v-tab>
           <v-tab>Library</v-tab>
         </v-tabs>
         <v-spacer></v-spacer>
-        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="drawer = !drawer" v-if="$store.state.login_user"></v-app-bar-nav-icon>
       </v-app-bar>
       <v-navigation-drawer v-model="drawer" fixed temporary right>
-        <v-list nav dense>
+        <v-list nav>
           <v-list-item-group>
             <v-list-item v-for="(menuItem, index) in menuItems" :key="index">
               <v-list-item-title>{{ menuItem.name }}</v-list-item-title>
@@ -35,6 +38,10 @@
 
 <script>
 import constants from './common/constants.js'
+import firebase from 'firebase'
+import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'App',
   data () {
@@ -42,6 +49,21 @@ export default {
       drawer: false,
       menuItems: constants.menuItems
     }
+  },
+  created () {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setLoginUser(user)
+      } else {
+        this.deleteLoginUser()
+      }
+    })
+  },
+  methods: {
+    ...mapActions(['setLoginUser','logout','deleteLoginUser'])
+  },
+  computed: {
+    ...mapGetters(['userName', 'photoURL'])
   }
 };
 </script>
