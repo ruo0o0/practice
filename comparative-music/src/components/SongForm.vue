@@ -23,10 +23,10 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-file-input label="楽曲を選択"></v-file-input>
+                <v-file-input accept="audio/*" label="楽曲を選択" @change="inputAudioFile" v-if="show"></v-file-input>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-file-input accept="image/*" label="画像を選択"></v-file-input>
+                <v-file-input accept="image/*" label="画像を選択" @change="inputImageFile" v-if="show"></v-file-input>
               </v-col>
             </v-row>
           </v-container>
@@ -43,7 +43,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="switchDialog"
+            @click="fileUpload(); switchDialog()"
           >
             作成
           </v-btn>
@@ -54,12 +54,35 @@
 </template>
 
 <script>
+import firebase from 'firebase'
+import "firebase/storage"
 import { mapActions } from 'vuex'
   export default {
     data () {
-
+      return {
+        audio: {},
+        file_image: '',
+        file_audio: '',
+        show: true,
+      }
     },
     methods: {
+      inputImageFile (event) {
+        this.file_image = event
+      },
+      inputAudioFile (event) {
+        this.file_audio = event
+      },
+      fileUpload () {
+        const storageImage = firebase.storage().ref("images/" + this.file_image.name)
+        storageImage.put(this.file_image)
+        const storageAudio = firebase.storage().ref("audios/" + this.file_audio.name)
+        storageAudio.put(this.file_audio)
+        this.show = false
+        this.$nextTick(function () {
+          this.show = true
+        })
+      },
       ...mapActions(['switchDialog'])
     }
   }

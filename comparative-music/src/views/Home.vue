@@ -3,7 +3,6 @@
     <v-row>
       <v-col cols=8>
         <v-text-field
-        v-model="message"
         label="曲名・アーティスト名"
         type="text"
         class="mt-16"
