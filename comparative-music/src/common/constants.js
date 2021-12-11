@@ -8,9 +8,5 @@ export default {
       name: 'LIBRARYS',
       url: '#'
     },
-    {
-      name: 'LOGOUT',
-      url: '#'
-    }
   ]
 }
