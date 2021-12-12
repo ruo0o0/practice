@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    album: [],
     login_user: null,
     drawer: false,
     dialog: false,
@@ -21,6 +22,10 @@ export default new Vuex.Store({
     },
     switchDialog (state) {
       state.dialog = !state.dialog
+    },
+    addMusic (state, {id, music}) {
+      music.id = id
+      state.album.push(music)
     }
   },
   actions: {
@@ -42,10 +47,18 @@ export default new Vuex.Store({
     },
     switchDialog ({commit}) {
       commit('switchDialog')
-    }
+    },
+    addMusic ({ getters, commit }, music) {
+      if (getters.uid) {
+        firebase.firestore().collection(`users/${getters.uid}/album`).add(music).then(doc => {
+        commit('addMusic', { id: doc.id, music })
+        })
+      }
+    },
   },
   getters: {
     userName: state => state.login_user ? state.login_user.displayName : '',
     photoURL: state => state.login_user ? state.login_user.photoURL : 'default_user_icon.png',
+    uid: state => state.login_user ? state.login_user.uid : null,
   }
 })

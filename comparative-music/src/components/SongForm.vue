@@ -14,12 +14,12 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  label="曲名"
+                  label="曲名" v-model="music.title"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  label="アーティスト名"
+                  label="アーティスト名" v-model="music.artist"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
@@ -60,7 +60,7 @@ import { mapActions } from 'vuex'
   export default {
     data () {
       return {
-        audio: {},
+        music: {},
         file_image: '',
         file_audio: '',
         show: true,
@@ -73,7 +73,7 @@ import { mapActions } from 'vuex'
       inputAudioFile (event) {
         this.file_audio = event
       },
-      fileUpload () {
+      async fileUpload () {
         const storageImage = firebase.storage().ref("images/" + this.file_image.name)
         storageImage.put(this.file_image)
         const storageAudio = firebase.storage().ref("audios/" + this.file_audio.name)
@@ -82,8 +82,15 @@ import { mapActions } from 'vuex'
         this.$nextTick(function () {
           this.show = true
         })
+        await storageImage.getDownloadURL().then(url => {
+          this.$set(this.music, 'image_url', url)
+        })
+        await storageAudio.getDownloadURL().then(url => {
+          this.$set(this.music, 'audio_url', url)
+        })
+        this.addMusic(this.music)
       },
-      ...mapActions(['switchDialog'])
+      ...mapActions(['switchDialog','addMusic'])
     }
   }
 </script>
