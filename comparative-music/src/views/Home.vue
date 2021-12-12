@@ -19,28 +19,35 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col
-        v-for="n in songImages.length"
-        :key="n"
-        class="d-flex child-flex"
-        cols="4" sm="3" md="2"
-        @click="switchDialog"
-      >
+      <v-col @click="switchDialog" class="d-flex child-flex" cols="4" sm="3" md="2">
         <v-img
-          :src="songImages[n-1]"
+          :src="create"
           aspect-ratio="1"
           class="grey lighten-2"
         >
-          <template v-slot:placeholder>
+        </v-img>
+      </v-col>
+      <v-col
+        v-for="(music, index) in album"
+        :key="index"
+        class="d-flex child-flex"
+        cols="4" sm="3" md="2"
+      >
+        <v-img
+          :lazy-src="music.image_url"
+          :src="music.image_url"
+          aspect-ratio="1"
+          class="grey lighten-2"
+          @mouseover="mouseHover(index)"
+          @mouseleave="mouseLeave"
+        >
+          <template>
             <v-row
               class="fill-height ma-0"
               align="center"
               justify="center"
             >
-              <v-progress-circular
-                indeterminate
-                color="grey lighten-5"
-              ></v-progress-circular>
+              <v-icon x-large v-show="hoverFlag && index === hoverIndex" @mouseover="mouseHover(index)" @mouseleave="mouseLeave">mdi-play-circle-outline</v-icon>
             </v-row>
           </template>
         </v-img>
@@ -54,13 +61,29 @@ import { mapActions } from 'vuex'
 export default {
   data() {
     return {
-      songImages: [
-        'song-images/create-song.jpg','song-images/piano_and_cat.jpg','song-images/two_cats.jpg','song-images/walk_on_piano.jpeg',
-      ]
+      create: 'song-images/create-song.jpg',
+      hoverFlag: false,
+      album: []
     }
   },
+  created () {
+    this.album = this.$store.state.album
+  },
   methods: {
+    mouseHover (index) {
+      this.hoverFlag = true
+      this.hoverIndex = index
+    },
+    mouseLeave () {
+      this.hoverFlag = false
+    },
     ...mapActions(['switchDialog'])
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  // .v-image {
+  //   outline: solid 3px rgba(10, 100, 136, 0.568);
+  // }
+</style>

@@ -75,13 +75,9 @@ import { mapActions } from 'vuex'
       },
       async fileUpload () {
         const storageImage = firebase.storage().ref("images/" + this.file_image.name)
-        storageImage.put(this.file_image)
+        await storageImage.put(this.file_image)
         const storageAudio = firebase.storage().ref("audios/" + this.file_audio.name)
-        storageAudio.put(this.file_audio)
-        this.show = false
-        this.$nextTick(function () {
-          this.show = true
-        })
+        await storageAudio.put(this.file_audio)
         await storageImage.getDownloadURL().then(url => {
           this.$set(this.music, 'image_url', url)
         })
@@ -89,6 +85,11 @@ import { mapActions } from 'vuex'
           this.$set(this.music, 'audio_url', url)
         })
         this.addMusic(this.music)
+        this.music = {}
+        this.show = false
+        this.$nextTick(function () {
+          this.show = true
+        })
       },
       ...mapActions(['switchDialog','addMusic'])
     }

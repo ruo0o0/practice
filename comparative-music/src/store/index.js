@@ -55,6 +55,11 @@ export default new Vuex.Store({
         })
       }
     },
+    fetchAlbum ({ getters, commit }) {
+      firebase.firestore().collection(`users/${getters.uid}/album`).get().then(snapshot => {
+        snapshot.forEach(doc => commit('addMusic', { id: doc.id, music: doc.data() }))
+      })
+    },
   },
   getters: {
     userName: state => state.login_user ? state.login_user.displayName : '',
