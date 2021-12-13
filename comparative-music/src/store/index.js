@@ -9,6 +9,8 @@ export default new Vuex.Store({
     login_user: null,
     drawer: false,
     dialog: false,
+    dialog_update: false,
+    music_tmp: {},
   },
   mutations: {
     setLoginUser (state, user) {
@@ -23,9 +25,19 @@ export default new Vuex.Store({
     switchDialog (state) {
       state.dialog = !state.dialog
     },
+    switchDialogUpdate (state) {
+      state.dialog_update = !state.dialog_update
+    },
     addMusic (state, {id, music}) {
       music.id = id
       state.album.push(music)
+    },
+    updateMusic (state, {id, music}) {
+      const index = state.album.findIndex( music => music.id === id)
+      state.album[index] = music
+    },
+    setMusicTemp (state, music) {
+      state.music_tmp = music
     }
   },
   actions: {
@@ -48,6 +60,9 @@ export default new Vuex.Store({
     switchDialog ({commit}) {
       commit('switchDialog')
     },
+    switchDialogUpdate ({commit}) {
+      commit('switchDialogUpdate')
+    },
     addMusic ({ getters, commit }, music) {
       if (getters.uid) {
         firebase.firestore().collection(`users/${getters.uid}/album`).add(music).then(doc => {
@@ -60,6 +75,16 @@ export default new Vuex.Store({
         snapshot.forEach(doc => commit('addMusic', { id: doc.id, music: doc.data() }))
       })
     },
+    updateMusic ({ getters, commit }, {id, music}) {
+      if (getters.uid) {
+        firebase.firestore().collection(`users/${getters.uid}/album`).doc(id).update(music).then(() => {
+        commit('updateMusic', { id, music })
+        })
+      }
+    },
+    setMusicTemp ({commit}, music) {
+      commit('setMusicTemp', music)
+    }
   },
   getters: {
     userName: state => state.login_user ? state.login_user.displayName : '',

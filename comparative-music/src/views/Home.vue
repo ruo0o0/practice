@@ -41,6 +41,7 @@
           class="grey lighten-2"
           @mouseover="mouseHover(index)"
           @mouseleave="mouseLeave"
+          @click.right.prevent="switchDialogUpdate(); setMusicTemp(music)"
         >
           <template>
             <v-row
@@ -92,7 +93,7 @@ export default {
       this.audio.pause()
       this.audioFlag = false
     },
-    ...mapActions(['switchDialog'])
+    ...mapActions(['switchDialog','switchDialogUpdate','setMusicTemp'])
   }
 }
 </script>

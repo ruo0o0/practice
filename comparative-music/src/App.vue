@@ -4,6 +4,7 @@
       <AppBar></AppBar>
       <SideNav></SideNav>
       <SongForm></SongForm>
+      <UpdateForm></UpdateForm>
     </header>
     <v-content>
       <v-container>
@@ -18,6 +19,7 @@ import firebase from 'firebase'
 import SideNav from './components/SideNav.vue'
 import AppBar from './components/AppBar.vue'
 import SongForm from './components/SongForm.vue'
+import UpdateForm from './components/UpdateForm.vue'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 
@@ -27,6 +29,7 @@ export default {
     SideNav,
     AppBar,
     SongForm,
+    UpdateForm,
   },
   data () {
     return {
