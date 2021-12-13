@@ -19,18 +19,19 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col @click="switchDialog" class="d-flex child-flex" cols="4" sm="3" md="2">
+      <v-col @click="switchDialog" class="child-flex pa-2" cols="4" sm="3" md="2">
         <v-img
           :src="create"
           aspect-ratio="1"
           class="grey lighten-2"
         >
         </v-img>
+        <p></p>
       </v-col>
       <v-col
         v-for="(music, index) in album"
         :key="index"
-        class="d-flex child-flex"
+        class=" child-flex pa-2"
         cols="4" sm="3" md="2"
       >
         <v-img
@@ -47,10 +48,12 @@
               align="center"
               justify="center"
             >
-              <v-icon x-large v-show="hoverFlag && index === hoverIndex" @mouseover="mouseHover(index)" @mouseleave="mouseLeave">mdi-play-circle-outline</v-icon>
+              <v-icon x-large v-show="hoverFlag && index === hoverIndex" @mouseover="mouseHover(index)" @mouseleave="mouseLeave" @click="!audioFlag ? play(music): stop()">mdi-play-circle-outline</v-icon>
             </v-row>
           </template>
         </v-img>
+        <p class="text-caption ma-0">{{ music.artist }}</p>
+        <p class="text-caption ma-0">{{ music.title }}</p>
       </v-col>
     </v-row>
   </v-container>
@@ -63,7 +66,9 @@ export default {
     return {
       create: 'song-images/create-song.jpg',
       hoverFlag: false,
-      album: []
+      audioFlag: false,
+      album: [],
+      audio: new Audio(),
     }
   },
   created () {
@@ -77,13 +82,25 @@ export default {
     mouseLeave () {
       this.hoverFlag = false
     },
+    play (music) {
+      this.audio.src = music.audio_url
+      this.audio.load()
+      this.audio.play()
+      this.audioFlag = true
+    },
+    stop () {
+      this.audio.pause()
+      this.audioFlag = false
+    },
     ...mapActions(['switchDialog'])
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  // .v-image {
-  //   outline: solid 3px rgba(10, 100, 136, 0.568);
-  // }
+  p {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 </style>
