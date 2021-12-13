@@ -50,6 +50,7 @@
           <v-btn
             color="red darken-1"
             text
+            @click="deleteConfirm($store.state.music_tmp.id)"
           >
             削除
           </v-btn>
@@ -79,6 +80,12 @@ import { mapActions } from 'vuex'
       inputAudioFile (event) {
         this.file_audio = event
       },
+      deleteConfirm (id) {
+        if (confirm('削除してよろしいですか?')) {
+          this.deleteMusic(id)
+          this.switchDialogUpdate
+        }
+      },
       async fileUpdate () {
         const storageImage = firebase.storage().ref("images/" + this.file_image.name)
         await storageImage.put(this.file_image)
@@ -97,7 +104,7 @@ import { mapActions } from 'vuex'
           this.show = true
         })
       },
-      ...mapActions(['switchDialogUpdate','updateMusic'])
+      ...mapActions(['switchDialogUpdate','updateMusic','deleteMusic'])
     }
   }
 </script>
