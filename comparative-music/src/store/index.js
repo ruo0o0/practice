@@ -11,6 +11,10 @@ export default new Vuex.Store({
     dialog: false,
     dialog_update: false,
     music_tmp: {},
+    player_bar: false,
+    key: 0,
+    music_active: {},
+    isPlay: false,
   },
   mutations: {
     setLoginUser (state, user) {
@@ -42,6 +46,16 @@ export default new Vuex.Store({
     },
     setMusicTemp (state, music) {
       state.music_tmp = music
+    },
+    switchPlayerBar (state) {
+      state.player_bar = true
+    },
+    switchBarContent (state, music) {
+      state.music_active = music
+      state.key++
+    },
+    switchPlayState (state) {
+      state.isPlay = !state.isPlay
     }
   },
   actions: {
@@ -95,6 +109,15 @@ export default new Vuex.Store({
     },
     setMusicTemp ({commit}, music) {
       commit('setMusicTemp', music)
+    },
+    switchPlayerBar ({commit}) {
+      commit('switchPlayerBar')
+    },
+    switchBarContent ({commit}, music) {
+      commit('switchBarContent', music)
+    },
+    switchPlayState ({commit}) {
+      commit('switchPlayState')
     }
   },
   getters: {

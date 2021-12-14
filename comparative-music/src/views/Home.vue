@@ -49,11 +49,13 @@
               align="center"
               justify="center"
             >
-              <v-icon x-large v-show="hoverFlag && index === hoverIndex" @mouseover="mouseHover(index)" @mouseleave="mouseLeave" @click="!audioFlag ? play(music): stop()">mdi-play-circle-outline</v-icon>
+              <v-btn icon @click="play(music)" v-if="hoverFlag && index === hoverIndex">
+                <v-icon x-large @mouseover="mouseHover(index)" @mouseleave="mouseLeave" >mdi-play-circle-outline</v-icon>
+              </v-btn>
             </v-row>
           </template>
         </v-img>
-        <p class="text-caption ma-0">{{ music.artist }}</p>
+        <p class="text-caption ma-0 mt-1">{{ music.artist }}</p>
         <p class="text-caption ma-0">{{ music.title }}</p>
       </v-col>
     </v-row>
@@ -67,7 +69,6 @@ export default {
     return {
       create: 'song-images/create-song.jpg',
       hoverFlag: false,
-      audioFlag: false,
       album: [],
       audio: new Audio(),
     }
@@ -84,16 +85,10 @@ export default {
       this.hoverFlag = false
     },
     play (music) {
-      this.audio.src = music.audio_url
-      this.audio.load()
-      this.audio.play()
-      this.audioFlag = true
+      this.switchBarContent(music)
+      this.switchPlayerBar()
     },
-    stop () {
-      this.audio.pause()
-      this.audioFlag = false
-    },
-    ...mapActions(['switchDialog','switchDialogUpdate','setMusicTemp'])
+    ...mapActions(['switchDialog','switchDialogUpdate','setMusicTemp','switchPlayerBar','switchBarContent'])
   }
 }
 </script>

@@ -5,6 +5,7 @@
       <SideNav></SideNav>
       <SongForm></SongForm>
       <UpdateForm></UpdateForm>
+      <PlayerBar></PlayerBar>
     </header>
     <v-content>
       <v-container>
@@ -20,6 +21,7 @@ import SideNav from './components/SideNav.vue'
 import AppBar from './components/AppBar.vue'
 import SongForm from './components/SongForm.vue'
 import UpdateForm from './components/UpdateForm.vue'
+import PlayerBar from './components/PlayerBar.vue'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 
@@ -30,6 +32,7 @@ export default {
     AppBar,
     SongForm,
     UpdateForm,
+    PlayerBar,
   },
   data () {
     return {
