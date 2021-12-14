@@ -81,8 +81,8 @@ import { mapActions } from 'vuex'
         this.file_audio = event
       },
       deleteConfirm (id) {
-        if (confirm('削除してよろしいですか?')) {
-          this.deleteMusic(id)
+        if (confirm('この楽曲を削除してよろしいですか?')) {
+          this.deleteMusic({id})
           this.switchDialogUpdate()
         }
       },
