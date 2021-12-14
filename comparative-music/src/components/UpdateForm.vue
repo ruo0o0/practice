@@ -83,20 +83,33 @@ import { mapActions } from 'vuex'
       deleteConfirm (id) {
         if (confirm('削除してよろしいですか?')) {
           this.deleteMusic(id)
-          this.switchDialogUpdate
+          this.switchDialogUpdate()
         }
       },
       async fileUpdate () {
         const storageImage = firebase.storage().ref("images/" + this.file_image.name)
-        await storageImage.put(this.file_image)
         const storageAudio = firebase.storage().ref("audios/" + this.file_audio.name)
-        await storageAudio.put(this.file_audio)
-        await storageImage.getDownloadURL().then(url => {
-          this.$set(this.music, 'image_url', url)
-        })
-        await storageAudio.getDownloadURL().then(url => {
-          this.$set(this.music, 'audio_url', url)
-        })
+        const that = this
+        await storageImage.getDownloadURL().then(onResolveImage, onRejectImage)
+        function onResolveImage(url) {
+          that.$set(that.music, 'image_url', url)
+        }
+        async function onRejectImage () {
+          await storageImage.put(that.file_image)
+          await storageImage.getDownloadURL().then(url => {
+            that.$set(that.music, 'image_url', url)
+          })
+        }
+        await storageAudio.getDownloadURL().then(onResolveAudio, onRejectAudio)
+        function onResolveAudio(url) {
+          that.$set(that.music, 'audio_url', url)
+        }
+        async function onRejectAudio () {
+          await storageAudio.put(that.file_audio)
+          await storageAudio.getDownloadURL().then(url => {
+            that.$set(that.music, 'audio_url', url)
+          })
+        }
         this.updateMusic({id: this.$store.state.music_tmp.id, music: this.music})
         this.music = {}
         this.show = false
