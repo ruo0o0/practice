@@ -12,6 +12,8 @@
         <router-view></router-view>
       </v-container>
     </v-content>
+    <footer>
+    </footer>
   </v-app>
 </template>
 
@@ -60,6 +62,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  footer {
+    height: 100px;
+  }
   .v-toolbar__title {
     overflow: visible !important;
     margin-right: 50px !important;
