@@ -1,0 +1,118 @@
+<template>
+  <v-card>
+    <v-card-title>
+      <span class="text-h5">楽曲編集</span>
+    </v-card-title>
+    <v-card-text>
+      <v-container>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              label="曲名" v-model="music.title"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              label="アーティスト名" v-model="music.artist"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="6" md="4">
+            <v-file-input accept="audio/*" label="楽曲を選択" :value="file_audio" @change="inputAudioFile" v-if="show"></v-file-input>
+          </v-col>
+          <v-col cols="12" sm="6" md="4">
+            <v-file-input accept="image/*" label="画像を選択" :value="file_image" @change="inputImageFile" v-if="show"></v-file-input>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn
+        color="blue darken-1"
+        text
+        @click="switchDialogUpdate"
+      >
+        キャンセル
+      </v-btn>
+      <v-btn
+        color="blue darken-1"
+        text
+        @click="fileUpdate(); switchDialogUpdate()"
+      >
+        作成
+      </v-btn>
+      <v-btn
+        color="red darken-1"
+        text
+        @click="deleteConfirm($store.state.music_tmp.id)"
+      >
+        削除
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</template>
+
+<script>
+import firebase from 'firebase'
+import "firebase/storage"
+import { mapActions } from 'vuex'
+  export default {
+    data () {
+      return {
+        music: {},
+        file_image: null,
+        file_audio: null,
+        show: true,
+      }
+    },
+    created () {
+      this.music = this.$store.state.music_tmp
+    },
+    methods: {
+      inputImageFile (event) {
+        this.file_image = event
+      },
+      inputAudioFile (event) {
+        this.file_audio = event
+      },
+      deleteConfirm (id) {
+        if (confirm('この楽曲を削除してよろしいですか?')) {
+          this.deleteMusic({id})
+          this.switchDialogUpdate()
+        }
+      },
+      async fileUpdate () {
+        const storageImage = firebase.storage().ref("images/" + this.file_image.name)
+        const storageAudio = firebase.storage().ref("audios/" + this.file_audio.name)
+        const that = this
+        await storageImage.getDownloadURL().then(onResolveImage, onRejectImage)
+        function onResolveImage(url) {
+          that.$set(that.music, 'image_url', url)
+        }
+        async function onRejectImage () {
+          await storageImage.put(that.file_image)
+          await storageImage.getDownloadURL().then(url => {
+            that.$set(that.music, 'image_url', url)
+          })
+        }
+        await storageAudio.getDownloadURL().then(onResolveAudio, onRejectAudio)
+        function onResolveAudio(url) {
+          that.$set(that.music, 'audio_url', url)
+        }
+        async function onRejectAudio () {
+          await storageAudio.put(that.file_audio)
+          await storageAudio.getDownloadURL().then(url => {
+            that.$set(that.music, 'audio_url', url)
+          })
+        }
+        this.updateMusic({id: this.$store.state.music_tmp.id, music: this.music})
+        this.music = {}
+        this.show = false
+        this.$nextTick(function () {
+          this.show = true
+        })
+      },
+      ...mapActions(['switchDialogUpdate','updateMusic','deleteMusic'])
+    }
+  }
+</script>

@@ -13,6 +13,7 @@ export default new Vuex.Store({
     music_tmp: {},
     player_bar: false,
     key: 0,
+    keyForm: 0,
     music_active: {},
     isPlay: false,
   },
@@ -31,10 +32,11 @@ export default new Vuex.Store({
     },
     switchDialogUpdate (state) {
       state.dialog_update = !state.dialog_update
+      state.keyForm++
     },
     addMusic (state, {id, music}) {
       music.id = id
-      state.album.push(music)
+      state.album.unshift(music)
     },
     updateMusic (state, {id, music}) {
       const index = state.album.findIndex( music => music.id === id)
