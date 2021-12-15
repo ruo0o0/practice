@@ -8,13 +8,14 @@
 
     <v-list>
       <v-list-item>
-        <v-list-item-icon
-          class="ml-0"
-          :class="{ 'ml-3': $vuetify.breakpoint.mdAndUp }">
-          <v-btn icon>
-            <v-icon>mdi-volume-high</v-icon>
-          </v-btn>
-        </v-list-item-icon>
+        <v-list-item-content>
+          <v-slider
+            
+            hide-details
+            v-model="volume"
+            prepend-icon="mdi-volume-high"
+          ></v-slider>
+        </v-list-item-content>
         <v-spacer></v-spacer>
         <v-list-item-avatar tile size="45" class="ma-0 mr-4">
           <v-img :src="music.image_url"></v-img>
@@ -23,8 +24,9 @@
           <v-list-item-title>{{ music.title }}</v-list-item-title>
           <v-list-item-subtitle>{{ music.artist }}</v-list-item-subtitle>
         </v-list-item-content>
+        <v-spacer></v-spacer>
         <v-list-item-icon>
-          <v-btn icon>
+          <v-btn icon @click="rewind">
             <v-icon>mdi-rewind</v-icon>
           </v-btn>
         </v-list-item-icon>
@@ -40,7 +42,7 @@
           class="ml-0"
           :class="{ 'mr-3': $vuetify.breakpoint.mdAndUp }"
         >
-          <v-btn icon>
+          <v-btn icon @click="rewind">
             <v-icon>mdi-fast-forward</v-icon>
           </v-btn>
         </v-list-item-icon>
@@ -61,6 +63,7 @@ export default {
       isPlay: false,
       duration: 0,
       currentTime: 0,
+      volume: 50
     }
   },
   created () {
@@ -74,13 +77,18 @@ export default {
     })
     this.audio.addEventListener('timeupdate', () => {
     this.currentTime = this.audio.currentTime
+    this.audio.volume = this.volume / 100
+    })
+    this.audio.addEventListener('ended', () => {
+      this.rewind()
+      this.stop()
     })
     this.play()
   },
   computed: {
     progress: function () {
       return (this.currentTime / this.duration) * 100
-    }
+    },
   },
   beforeDestroy () {
     this.audio.pause()
@@ -96,7 +104,16 @@ export default {
       this.isPlay = false
       this.switchPlayState()
     },
+    rewind () {
+      this.audio.currentTime = 0
+    },
     ...mapActions(['switchPlayState'])
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .v-list-item__content {
+    overflow: visible !important;
+  }
+</style>
