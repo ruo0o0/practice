@@ -16,8 +16,8 @@
             prepend-icon="mdi-volume-high"
           ></v-slider>
         </v-list-item-content>
-        <v-spacer></v-spacer>
-        <v-list-item-avatar tile size="45" class="ma-0 mr-4">
+        <v-spacer class="mr-16"></v-spacer>
+        <v-list-item-avatar tile size="45" class="ma-0 mx-4">
           <v-img :src="music.image_url"></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
@@ -25,6 +25,11 @@
           <v-list-item-subtitle>{{ music.artist }}</v-list-item-subtitle>
         </v-list-item-content>
         <v-spacer></v-spacer>
+        <v-list-item-icon :class="{ 'mr-8': $vuetify.breakpoint.smAndUp }">
+          <v-btn icon>
+            <v-icon>mdi-message-text</v-icon>
+          </v-btn>
+        </v-list-item-icon>
         <v-list-item-icon>
           <v-btn icon @click="rewind">
             <v-icon>mdi-rewind</v-icon>

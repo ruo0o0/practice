@@ -124,5 +124,8 @@ export default new Vuex.Store({
     userName: state => state.login_user ? state.login_user.displayName : '',
     photoURL: state => state.login_user ? state.login_user.photoURL : 'default_user_icon.png',
     uid: state => state.login_user ? state.login_user.uid : null,
+    playerBar: state => {
+      return state.player_bar
+    }
   }
 })

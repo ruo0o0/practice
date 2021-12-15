@@ -1,6 +1,7 @@
 <template>
   <div class="text-center">
-    <v-bottom-sheet 
+    <v-bottom-sheet
+     ref="sheet"
      v-model="$store.state.player_bar"
      hide-overlay
      persistent
@@ -16,6 +17,18 @@ import BarContents from './BarContents.vue'
 export default {
   components: {
     BarContents
+  },
+  computed: {
+    bar() {
+      return this.$store.getters.playerBar
+    }
+  },
+  watch: {
+    bar() {
+      this.$nextTick(() => {
+        this.$refs.sheet.showScroll()
+      })
+    }
   }
 }
 </script>
