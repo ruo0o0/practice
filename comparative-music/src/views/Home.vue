@@ -3,12 +3,13 @@
     <v-row>
       <v-col cols=8>
         <v-text-field
+        v-model="keyword"
         label="曲名・アーティスト名"
         type="text"
         class="mt-16"
         >
-        <template v-slot:append-outer>
-        <v-btn>検索</v-btn>
+        <template v-slot:append>
+        <v-icon color="grey darken-1">mdi-magnify</v-icon>
         </template>
         </v-text-field>
       </v-col>
@@ -29,7 +30,7 @@
         <p></p>
       </v-col>
       <v-col
-        v-for="(music, index) in album"
+        v-for="(music, index) in filteredAlbum"
         :key="index"
         class=" child-flex pa-2"
         cols="4" sm="3" md="2"
@@ -67,6 +68,7 @@ import { mapActions } from 'vuex'
 export default {
   data() {
     return {
+      keyword: '',
       create: 'song-images/create-song.jpg',
       hoverFlag: false,
       album: [],
@@ -75,6 +77,19 @@ export default {
   },
   created () {
     this.album = this.$store.state.album
+  },
+  computed: {
+    filteredAlbum: function () {
+      const album = []
+      for (const i in this.album) {
+        let music = this.album[i]
+        if (music.title.indexOf(this.keyword) !== -1 ||
+            music.artist.indexOf(this.keyword) !== -1) {
+            album.push(music)
+        }
+      }
+      return album
+    }
   },
   methods: {
     mouseHover (index) {
