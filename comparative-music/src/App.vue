@@ -5,7 +5,7 @@
       <SideNav></SideNav>
       <SongForm></SongForm>
       <UpdateForm></UpdateForm>
-      <PlayerBar></PlayerBar>
+      <PlayerBar v-if="$store.state.login_user"></PlayerBar>
     </header>
     <v-content>
       <v-container>

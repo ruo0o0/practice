@@ -9,7 +9,7 @@
     <v-toolbar-items v-if="$store.state.login_user">
       <v-btn text @click="logout">ログアウト</v-btn>
     </v-toolbar-items>
-    <v-tabs v-if="$store.state.login_user">
+    <v-tabs v-if="$store.state.login_user" right>
       <v-tab>ホーム</v-tab>
       <v-tab>ライブラリー</v-tab>
     </v-tabs>

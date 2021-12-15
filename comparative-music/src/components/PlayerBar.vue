@@ -4,7 +4,8 @@
      v-model="$store.state.player_bar"
      hide-overlay
      persistent
-     no-click-animation>
+     no-click-animation
+     :retain-focus="false">
       <BarContents :key="$store.state.key"></BarContents>
     </v-bottom-sheet>
   </div>

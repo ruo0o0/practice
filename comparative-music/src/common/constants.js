@@ -1,11 +1,11 @@
 export default {
   menuItems: [
     {
-      name: 'HOME',
+      name: 'ホーム',
       url: '#'
     },
     {
-      name: 'LIBRARYS',
+      name: 'ライブラリー',
       url: '#'
     },
   ]
