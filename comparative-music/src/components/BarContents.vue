@@ -10,7 +10,6 @@
       <v-list-item>
         <v-list-item-content>
           <v-slider
-            
             hide-details
             v-model="volume"
             prepend-icon="mdi-volume-high"
@@ -26,7 +25,7 @@
         </v-list-item-content>
         <v-spacer></v-spacer>
         <v-list-item-icon :class="{ 'mr-8': $vuetify.breakpoint.smAndUp }">
-          <v-btn icon>
+          <v-btn icon @click="switchCommentState">
             <v-icon>mdi-message-text</v-icon>
           </v-btn>
         </v-list-item-icon>
@@ -112,7 +111,7 @@ export default {
     rewind () {
       this.audio.currentTime = 0
     },
-    ...mapActions(['switchPlayState'])
+    ...mapActions(['switchPlayState','switchCommentState'])
   }
 }
 </script>

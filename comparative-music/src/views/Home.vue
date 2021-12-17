@@ -36,12 +36,14 @@
         cols="4" sm="3" md="2"
       >
         <v-img
+          :class="{border: index == clickIndex}"
           :lazy-src="music.image_url"
           :src="music.image_url"
           aspect-ratio="1"
           class="grey lighten-2"
           @mouseover="mouseHover(index)"
           @mouseleave="mouseLeave"
+          @click="enborder(index)"
           @click.right.prevent="switchDialogUpdate(); setMusicTemp(music)"
         >
           <template>
@@ -50,7 +52,7 @@
               align="center"
               justify="center"
             >
-              <v-btn icon @click="play(music)" v-if="hoverFlag && index === hoverIndex">
+              <v-btn icon @click.stop="play(music)" v-if="hoverFlag && index === hoverIndex">
                 <v-icon x-large @mouseover="mouseHover(index)" @mouseleave="mouseLeave" >mdi-play-circle-outline</v-icon>
               </v-btn>
             </v-row>
@@ -73,6 +75,7 @@ export default {
       hoverFlag: false,
       album: [],
       audio: new Audio(),
+      clickIndex: null
     }
   },
   created () {
@@ -103,6 +106,9 @@ export default {
       this.switchBarContent(music)
       this.switchPlayerBar()
     },
+    enborder (index) {
+      this.clickIndex = index
+    },
     ...mapActions(['switchDialog','switchDialogUpdate','setMusicTemp','switchPlayerBar','switchBarContent'])
   }
 }
@@ -113,5 +119,8 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+  }
+  .border {
+    box-shadow: 0 0 5px 2px white;
   }
 </style>

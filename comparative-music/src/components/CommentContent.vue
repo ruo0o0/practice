@@ -1,0 +1,50 @@
+<template>
+  <v-card>
+    <v-card-title class="subtitle-1">{{ music.title }}</v-card-title>
+    <v-card-subtitle class="py-0">{{ music.artist }}</v-card-subtitle>
+    <v-card-text class="pb-0">
+      <v-textarea
+        background-color="grey darken-4"
+        
+        auto-grow
+        clearable
+        clear-icon="mdi-close-circle"
+        placeholder="自由にご記述ください"
+        rows="12"></v-textarea>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn
+        color="blue darken-1"
+        text
+        @click="switchCommentState"
+      >
+        キャンセル
+      </v-btn>
+      <v-btn
+        color="blue darken-1"
+        text
+        @click="switchCommentState"
+      >
+        保存
+      </v-btn>
+    </v-card-actions>
+  </v-card>
+</template>
+
+<script>
+import { mapActions } from 'vuex'
+export default {
+  data () {
+    return {
+      music: {}
+    }
+  },
+  created () {
+    this.music = this.$store.state.music_active
+  },
+  methods: {
+    ...mapActions(['switchCommentState'])
+  }
+}
+</script>

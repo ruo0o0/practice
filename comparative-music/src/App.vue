@@ -3,11 +3,12 @@
     <header>
       <AppBar></AppBar>
       <SideNav></SideNav>
+    </header>
+    <v-content>
       <SongForm></SongForm>
       <UpdateForm></UpdateForm>
       <PlayerBar v-if="$store.state.login_user"></PlayerBar>
-    </header>
-    <v-content>
+      <CommentField></CommentField>
       <v-container>
         <router-view></router-view>
       </v-container>
@@ -24,6 +25,7 @@ import AppBar from './components/AppBar.vue'
 import SongForm from './components/SongForm.vue'
 import UpdateForm from './components/UpdateForm.vue'
 import PlayerBar from './components/PlayerBar.vue'
+import CommentField from './components/CommentField.vue'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 
@@ -35,6 +37,7 @@ export default {
     SongForm,
     UpdateForm,
     PlayerBar,
+    CommentField,
   },
   data () {
     return {

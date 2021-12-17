@@ -16,6 +16,8 @@ export default new Vuex.Store({
     keyForm: 0,
     music_active: {},
     isPlay: false,
+    comment: false,
+    comment_key: 0,
   },
   mutations: {
     setLoginUser (state, user) {
@@ -58,6 +60,10 @@ export default new Vuex.Store({
     },
     switchPlayState (state) {
       state.isPlay = !state.isPlay
+    },
+    switchCommentState (state) {
+      state.comment = !state.comment
+      state.comment_key++
     }
   },
   actions: {
@@ -120,6 +126,9 @@ export default new Vuex.Store({
     },
     switchPlayState ({commit}) {
       commit('switchPlayState')
+    },
+    switchCommentState ({commit}) {
+      commit('switchCommentState')
     }
   },
   getters: {
