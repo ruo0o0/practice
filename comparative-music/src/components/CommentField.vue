@@ -2,8 +2,10 @@
   <v-row justify="center">
     <v-dialog
       v-model="$store.state.comment"
-      persistent
       max-width="500px"
+      persistent
+      hide-overlay
+      no-click-animation
     >
       <CommentContent :key="$store.state.comment_key"></CommentContent>
     </v-dialog>

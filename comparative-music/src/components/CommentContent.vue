@@ -5,7 +5,7 @@
     <v-card-text class="pb-0">
       <v-textarea
         background-color="grey darken-4"
-        
+        v-model="music.comment"
         auto-grow
         clearable
         clear-icon="mdi-close-circle"
@@ -24,7 +24,7 @@
       <v-btn
         color="blue darken-1"
         text
-        @click="switchCommentState"
+        @click="switchCommentState(); updateComment()"
       >
         保存
       </v-btn>
@@ -44,7 +44,10 @@ export default {
     this.music = this.$store.state.music_active
   },
   methods: {
-    ...mapActions(['switchCommentState'])
+    updateComment () {
+      this.updateMusic({id: this.music.id, music: this.music})
+    },
+    ...mapActions(['switchCommentState','updateMusic'])
   }
 }
 </script>
