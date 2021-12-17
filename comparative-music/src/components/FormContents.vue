@@ -16,10 +16,10 @@
               label="アーティスト名" v-model="music.artist"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="4">
+          <v-col cols="12" sm="6">
             <v-file-input accept="audio/*" label="楽曲を選択" :value="file_audio" @change="inputAudioFile" v-if="show"></v-file-input>
           </v-col>
-          <v-col cols="12" sm="6" md="4">
+          <v-col cols="12" sm="6">
             <v-file-input accept="image/*" label="画像を選択" :value="file_image" @change="inputImageFile" v-if="show"></v-file-input>
           </v-col>
         </v-row>
