@@ -4,9 +4,9 @@ export default {
       name: 'ホーム',
       url: '#'
     },
-    {
-      name: 'ライブラリー',
-      url: '#'
-    },
+    // {
+    //   name: 'ライブラリー',
+    //   url: '#'
+    // },
   ]
 }

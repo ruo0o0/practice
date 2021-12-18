@@ -11,7 +11,7 @@
     </v-toolbar-items>
     <v-tabs v-if="$store.state.login_user" right>
       <v-tab>ホーム</v-tab>
-      <v-tab>ライブラリー</v-tab>
+      <!-- <v-tab>ライブラリー</v-tab> -->
     </v-tabs>
     <v-spacer></v-spacer>
     <v-app-bar-nav-icon @click="toggleSideMenu" v-if="$store.state.login_user"></v-app-bar-nav-icon>

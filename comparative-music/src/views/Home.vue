@@ -14,7 +14,7 @@
         </template>
         </v-text-field>
       </v-col>
-      <v-col class="mt-16">
+      <v-col class="mt-16" v-show="false">
         <div align="center" class="mt-4">
           <v-btn>比較・鑑賞</v-btn>
         </div>
@@ -79,6 +79,7 @@ export default {
   },
   created () {
     this.album = this.$store.state.album
+    this.putFilteredAlbum(this.album)
   },
   computed: {
     filteredAlbum: function () {
