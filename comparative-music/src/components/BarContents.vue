@@ -46,7 +46,7 @@
           class="ml-0"
           :class="{ 'mr-3': $vuetify.breakpoint.mdAndUp }"
         >
-          <v-btn icon @click="rewind">
+          <v-btn icon @click="next()">
             <v-icon>mdi-fast-forward</v-icon>
           </v-btn>
         </v-list-item-icon>
@@ -63,6 +63,7 @@ export default {
   data () {
     return {
       music: {},
+      album: [],
       audio: new Audio,
       isPlay: false,
       duration: 0,
@@ -72,6 +73,7 @@ export default {
   },
   created () {
     this.music = this.$store.state.music_active
+    this.album = this.$store.state.filtered_album
   },
   mounted () {
     this.audio.src = this.music.audio_url
@@ -84,8 +86,7 @@ export default {
     this.audio.volume = this.volume / 100
     })
     this.audio.addEventListener('ended', () => {
-      this.rewind()
-      this.stop()
+      this.next()
     })
     this.play()
   },
@@ -111,7 +112,16 @@ export default {
     rewind () {
       this.audio.currentTime = 0
     },
-    ...mapActions(['switchPlayState','switchCommentState'])
+    next () {
+      const index = this.album.findIndex(music => music.id == this.music.id)
+      if (index == this.album.length - 1) {
+        this.switchBarContent(this.album[0])
+      } else {
+        this.switchBarContent(this.album[index + 1])
+      }
+      this.switchPlayerBar()
+    },
+    ...mapActions(['switchPlayState','switchCommentState','switchPlayerBar','switchBarContent',])
   }
 }
 </script>

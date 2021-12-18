@@ -18,6 +18,7 @@ export default new Vuex.Store({
     isPlay: false,
     comment: false,
     comment_key: 0,
+    filtered_album: []
   },
   mutations: {
     setLoginUser (state, user) {
@@ -67,6 +68,9 @@ export default new Vuex.Store({
     },
     setMusicActive (state, music) {
       state.music_active = music
+    },
+    putFilteredAlbum (state, album) {
+      state.filtered_album = album
     }
   },
   actions: {
@@ -135,6 +139,9 @@ export default new Vuex.Store({
     },
     setMusicActive ({commit}, music) {
       commit('setMusicActive', music)
+    },
+    putFilteredAlbum ({commit}, album) {
+      commit('putFilteredAlbum', album)
     }
   },
   getters: {

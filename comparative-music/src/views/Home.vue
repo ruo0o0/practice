@@ -4,6 +4,7 @@
       <v-col cols=8>
         <v-text-field
         v-model="keyword"
+        @change="putFilteredAlbum(filteredAlbum)"
         label="曲名・アーティスト名"
         type="text"
         class="mt-16"
@@ -104,7 +105,7 @@ export default {
       this.switchBarContent(music)
       this.switchPlayerBar()
     },
-    ...mapActions(['switchDialog','switchDialogUpdate','setMusicTemp','switchPlayerBar','switchBarContent','switchCommentState','setMusicActive'])
+    ...mapActions(['switchDialog','switchDialogUpdate','setMusicTemp','switchPlayerBar','switchBarContent','switchCommentState','setMusicActive','putFilteredAlbum'])
   }
 }
 </script>
