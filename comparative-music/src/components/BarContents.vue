@@ -25,7 +25,7 @@
         </v-list-item-content>
         <v-spacer></v-spacer>
         <v-list-item-icon :class="{ 'mr-8': $vuetify.breakpoint.smAndUp }">
-          <v-btn icon @click="switchCommentState">
+          <v-btn icon @click="setMusicActive(music); switchCommentState()">
             <v-icon>mdi-message-text</v-icon>
           </v-btn>
         </v-list-item-icon>
@@ -121,7 +121,7 @@ export default {
       }
       this.switchPlayerBar()
     },
-    ...mapActions(['switchPlayState','switchCommentState','switchPlayerBar','switchBarContent',])
+    ...mapActions(['switchPlayState','switchCommentState','switchPlayerBar','switchBarContent','setMusicActive'])
   }
 }
 </script>
