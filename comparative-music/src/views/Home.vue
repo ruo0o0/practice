@@ -36,14 +36,13 @@
         cols="4" sm="3" md="2"
       >
         <v-img
-          :class="{border: index == clickIndex}"
           :lazy-src="music.image_url"
           :src="music.image_url"
           aspect-ratio="1"
           class="grey lighten-2"
           @mouseover="mouseHover(index)"
           @mouseleave="mouseLeave"
-          @click="enborder(index)"
+          @click="setMusicActive(music); switchCommentState()"
           @click.right.prevent="switchDialogUpdate(); setMusicTemp(music)"
         >
           <template>
@@ -75,7 +74,6 @@ export default {
       hoverFlag: false,
       album: [],
       audio: new Audio(),
-      clickIndex: null
     }
   },
   created () {
@@ -106,10 +104,7 @@ export default {
       this.switchBarContent(music)
       this.switchPlayerBar()
     },
-    enborder (index) {
-      this.clickIndex = index
-    },
-    ...mapActions(['switchDialog','switchDialogUpdate','setMusicTemp','switchPlayerBar','switchBarContent'])
+    ...mapActions(['switchDialog','switchDialogUpdate','setMusicTemp','switchPlayerBar','switchBarContent','switchCommentState','setMusicActive'])
   }
 }
 </script>
@@ -119,8 +114,5 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-  }
-  .border {
-    box-shadow: 0 0 5px 2px white;
   }
 </style>

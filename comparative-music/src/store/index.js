@@ -64,6 +64,9 @@ export default new Vuex.Store({
     switchCommentState (state) {
       state.comment = !state.comment
       state.comment_key++
+    },
+    setMusicActive (state, music) {
+      state.music_active = music
     }
   },
   actions: {
@@ -129,6 +132,9 @@ export default new Vuex.Store({
     },
     switchCommentState ({commit}) {
       commit('switchCommentState')
+    },
+    setMusicActive ({commit}, music) {
+      commit('setMusicActive', music)
     }
   },
   getters: {
