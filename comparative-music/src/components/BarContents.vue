@@ -4,6 +4,7 @@
       v-model="progress"
       class="my-0"
       height="3"
+      @change="onChange"
     ></v-progress-linear>
 
     <v-list>
@@ -91,8 +92,13 @@ export default {
     this.play()
   },
   computed: {
-    progress: function () {
-      return (this.currentTime / this.duration) * 100
+    progress: {
+      get() {
+        return (this.currentTime / this.duration) * 100
+      },
+      set(newValue) {
+        return newValue
+      }
     },
   },
   beforeDestroy () {
@@ -121,6 +127,9 @@ export default {
       }
       this.switchPlayerBar()
     },
+    onChange (event) {
+      this.audio.currentTime = (event / 100) * this.duration
+    },
     ...mapActions(['switchPlayState','switchCommentState','switchPlayerBar','switchBarContent','setMusicActive'])
   }
 }
@@ -129,5 +138,8 @@ export default {
 <style lang="scss" scoped>
   .v-list-item__content {
     overflow: visible !important;
+  }
+  .v-progress-linear {
+    cursor: pointer !important;
   }
 </style>
