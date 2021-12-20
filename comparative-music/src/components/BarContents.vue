@@ -116,7 +116,14 @@ export default {
       this.switchPlayState()
     },
     rewind () {
-      this.audio.currentTime = 0
+      const index = this.album.findIndex(music => music.id == this.music.id)
+      if (this.audio.currentTime > 2) {
+        this.audio.currentTime = 0
+      } else if (index == 0) {
+        this.switchBarContent(this.album[this.album.length-1])
+      } else {
+        this.switchBarContent(this.album[index-1])
+      }
     },
     next () {
       const index = this.album.findIndex(music => music.id == this.music.id)
