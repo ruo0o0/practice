@@ -2,11 +2,11 @@ export default {
   menuItems: [
     {
       name: 'ホーム',
-      url: '#'
+      url: '/home'
     },
-    // {
-    //   name: 'ライブラリー',
-    //   url: '#'
-    // },
+    {
+      name: 'プロフィール',
+      url: '/profile'
+    },
   ]
 }
