@@ -18,7 +18,8 @@ export default new Vuex.Store({
     isPlay: false,
     comment: false,
     comment_key: 0,
-    filtered_album: []
+    filtered_album: [],
+    profile: {}
   },
   mutations: {
     setLoginUser (state, user) {
@@ -40,6 +41,10 @@ export default new Vuex.Store({
     addMusic (state, {id, music}) {
       music.id = id
       state.album.unshift(music)
+    },
+    addProfile (state, {id, profile}) {
+      profile.id = id
+      state.profile = profile
     },
     updateMusic (state, {id, music}) {
       const index = state.album.findIndex( music => music.id === id)
@@ -103,9 +108,21 @@ export default new Vuex.Store({
         })
       }
     },
+    addProfile ({ getters, commit }, profile) {
+      if (getters.uid) {
+        firebase.firestore().collection(`users/${getters.uid}/profile`).add(profile).then(doc => {
+          commit('addProfile', { id: doc.id, profile })
+        })
+      }
+    },
     fetchAlbum ({ getters, commit }) {
       firebase.firestore().collection(`users/${getters.uid}/album`).get().then(snapshot => {
         snapshot.forEach(doc => commit('addMusic', { id: doc.id, music: doc.data() }))
+      })
+    },
+    fetchProfile ({ getters, commit }) {
+      firebase.firestore().collection(`users/${getters.uid}/profile`).get().then(snapshot => {
+        snapshot.forEach(doc => commit('addProfile', { id: doc.id, profile: doc.data() }))
       })
     },
     updateMusic ({ getters, commit }, {id, music}) {

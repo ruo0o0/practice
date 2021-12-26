@@ -4,8 +4,9 @@
       <v-list-item>
         <v-list-item-content class="py-2">
           <v-list-item-title class="text-center mb-2">hoge</v-list-item-title>
+          <input style="display: none" ref="input" type="file" accept="image/*" @change="fileUpload">
           <v-list-item-title class="mb-2">
-            <v-img width="128" :src="photoURL" aspect-ratio="1" class="mx-auto"></v-img>
+            <v-img width="128" :src="profileImage" aspect-ratio="1" class="mx-auto" @click="$refs.input.click()"></v-img>
           </v-list-item-title>
           <!-- <v-btn class="mx-auto">フォローする</v-btn> -->
         </v-list-item-content>
@@ -75,7 +76,7 @@
         <div class="flex mt-2 ml-2">
           <div>
             <v-avatar tile rounded="sm">
-              <v-img :src="photoURL" aspect-ratio="1"></v-img>
+              <v-img :src="profileImage" aspect-ratio="1"></v-img>
             </v-avatar>
           </div>
           <div class="flex-grow">
@@ -102,15 +103,39 @@
 </template>
 
 <script>
+import firebase from 'firebase'
+import "firebase/storage"
+import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       album: [],
+      profile: {}
     }
   },
   created () {
     this.album = this.$store.state.album
+    this.profile = this.$store.state.profile
+  },
+  methods: {
+    async fileUpload (event) {
+      let file = event.target.files[0]
+      const storageImage = firebase.storage().ref("profile_images/" + file.name)
+      const that = this
+      await storageImage.getDownloadURL().then(onResolve, onReject)
+      function onResolve(url) {
+        that.$set(that.profile, 'profile_image', url)
+      }
+      async function onReject () {
+        await storageImage.put(file)
+        await storageImage.getDownloadURL().then(url => {
+          that.$set(that.profile, 'profile_image', url)
+        })
+      }
+      this.addProfile(this.profile)
+    },
+    ...mapActions(['addProfile',])
   },
   computed: {
     artists: function () {
@@ -121,6 +146,13 @@ export default {
     },
     filteredAlbum: function () {
       return this.album.filter(music => music.comment)
+    },
+    profileImage: function () {
+      if (this.$store.state.profile.profile_image) {
+        return this.$store.state.profile.profile_image
+      } else {
+        return 'default_user_icon.png'
+      }
     },
     ...mapGetters(['photoURL'])
   }

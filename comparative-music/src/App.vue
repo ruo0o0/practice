@@ -57,6 +57,7 @@ export default {
       if (user) {
         this.setLoginUser(user)
         this.fetchAlbum()
+        this.fetchProfile()
         if ( this.$router.currentRoute.name === 'Login') this.$router.push({name: 'Home'})
       } else {
         this.deleteLoginUser()
@@ -65,7 +66,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['setLoginUser','deleteLoginUser','fetchAlbum'])
+    ...mapActions(['setLoginUser','deleteLoginUser','fetchAlbum','fetchProfile'])
   },
   computed: {
     ...mapGetters(['userName', 'photoURL'])
