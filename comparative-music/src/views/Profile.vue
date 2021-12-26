@@ -3,7 +3,12 @@
     <v-card width="300">
       <v-list-item>
         <v-list-item-content class="py-2">
-          <v-list-item-title class="text-center mb-2">hoge</v-list-item-title>
+          <v-list-item-title @click="doEdit" v-if="!edit" class="text-center mb-2">
+            {{ profile.name }}
+          </v-list-item-title>
+          <v-list-item-title v-else class="text-center mb-2">
+            <input type="text" v-model="profile.name" @blur="edit = false" v-focus @keyup.enter.exact="edit = false">
+          </v-list-item-title>
           <input style="display: none" ref="input" type="file" accept="image/*" @change="fileUpload">
           <v-list-item-title class="mb-2">
             <v-img width="128" :src="profileImage" aspect-ratio="1" class="mx-auto" @click="$refs.input.click()"></v-img>
@@ -67,7 +72,7 @@
       </v-list>
     </v-card>
     <v-card width="600" class="ml-4" min-height="100">
-      <v-card-title class="subtitle-1 py-2">hogeさんの感想</v-card-title>
+      <v-card-title class="subtitle-1 py-2">{{ profile.name }}さんの感想</v-card-title>
       <v-divider></v-divider>
       <div
         v-for="(music, index) in filteredAlbum"
@@ -80,7 +85,7 @@
             </v-avatar>
           </div>
           <div class="flex-grow">
-            <p class="ml-2 mb-2">hoge</p>
+            <p class="ml-2 mb-2">{{ profile.name }}</p>
             <v-card color="grey darken-4" class="ma-2">
               <v-card-title class="subtitle-1">{{ music.title }}</v-card-title>
               <v-card-subtitle class="py-0">{{ music.artist }}</v-card-subtitle>
@@ -111,14 +116,25 @@ export default {
   data () {
     return {
       album: [],
-      profile: {}
+      profile: {name: 'Musaic'},
+      edit: false,
     }
   },
   created () {
     this.album = this.$store.state.album
-    this.profile = this.$store.state.profile
+    // this.profile = this.$store.state.profile
+  },
+  directives: {
+    focus: {
+      inserted: function (el) {
+        el.focus()
+      }
+    }
   },
   methods: {
+    doEdit () {
+      this.edit = true
+    },
     async fileUpload (event) {
       let file = event.target.files[0]
       const storageImage = firebase.storage().ref("profile_images/" + file.name)
@@ -133,9 +149,13 @@ export default {
           that.$set(that.profile, 'profile_image', url)
         })
       }
-      this.addProfile(this.profile)
+      if (this.$store.state.profile) {
+        this.updateProfile({id: this.$store.state.profile.id, profile: this.profile})
+      } else {
+        this.addProfile(this.profile)
+      }
     },
-    ...mapActions(['addProfile',])
+    ...mapActions(['addProfile','updateProfile'])
   },
   computed: {
     artists: function () {
@@ -174,5 +194,10 @@ export default {
   }
   .font-size {
     font-size: 0.8125rem;
+  }
+  input {
+    outline: none;
+    color: white;
+    text-align: center;
   }
 </style>

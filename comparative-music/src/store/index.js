@@ -50,6 +50,9 @@ export default new Vuex.Store({
       const index = state.album.findIndex( music => music.id === id)
       state.album[index] = music
     },
+    updateProfile (state, profile) {
+      state.profile = profile
+    },
     deleteMusic (state, {id}) {
       const index = state.album.findIndex( music => music.id === id)
       state.album.splice(index, 1)
@@ -129,6 +132,13 @@ export default new Vuex.Store({
       if (getters.uid) {
         firebase.firestore().collection(`users/${getters.uid}/album`).doc(id).update(music).then(() => {
         commit('updateMusic', { id, music })
+        })
+      }
+    },
+    updateProfile ({ getters, commit }, {id, profile}) {
+      if (getters.uid) {
+        firebase.firestore().collection(`users/${getters.uid}/profile`).doc(id).update(profile).then(() => {
+          commit('updateProfile', profile)
         })
       }
     },
