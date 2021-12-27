@@ -68,8 +68,9 @@
         <v-divider></v-divider>
         <v-list-item>
           <v-list-item-title>自己紹介</v-list-item-title>
+          <v-icon small @click="switchDialogProfile">mdi-pencil</v-icon>
         </v-list-item>
-        <p class="font-size px-4">Write something you want to appeal</p>
+        <p class="font-size px-4">{{ $store.state.profile.comment }}</p>
       </v-list>
     </v-card>
     <v-card width="600" class="ml-4" min-height="100">
@@ -93,7 +94,7 @@
               <v-card-text class="pb-0">
                 <v-textarea
                   background-color="#1E1E1E"
-                  :value="music.comment"
+                  v-model="music.comment"
                   readonly
                   loading="false"
                 >
@@ -117,7 +118,7 @@ export default {
   data () {
     return {
       album: [],
-      profile: {name: 'ユーザー', profile_image: 'default_user_icon.png'},
+      profile: {name: 'ユーザー', profile_image: 'default_user_icon.png', comment: 'Write something you want to appeal.'},
       edit: false,
     }
   },
@@ -168,7 +169,7 @@ export default {
         this.addProfile(this.profile)
       }
     },
-    ...mapActions(['addProfile','updateProfile'])
+    ...mapActions(['addProfile','updateProfile', 'switchDialogProfile'])
   },
   computed: {
     artists: function () {

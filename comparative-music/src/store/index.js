@@ -10,6 +10,7 @@ export default new Vuex.Store({
     drawer: false,
     dialog: false,
     dialog_update: false,
+    dialog_profile: false,
     music_tmp: {},
     player_bar: false,
     key: 0,
@@ -19,7 +20,8 @@ export default new Vuex.Store({
     comment: false,
     comment_key: 0,
     filtered_album: [],
-    profile: {name: 'ユーザー', profile_image: 'default_user_icon.png'}
+    profile: {name: 'ユーザー', profile_image: 'default_user_icon.png', comment: 'Write something you want to appeal.'},
+    profile_key: 0
   },
   mutations: {
     setLoginUser (state, user) {
@@ -37,6 +39,10 @@ export default new Vuex.Store({
     switchDialogUpdate (state) {
       state.dialog_update = !state.dialog_update
       state.keyForm++
+    },
+    switchDialogProfile (state) {
+      state.dialog_profile = !state.dialog_profile
+      state.profile_key++
     },
     addMusic (state, {id, music}) {
       music.id = id
@@ -103,6 +109,9 @@ export default new Vuex.Store({
     },
     switchDialogUpdate ({commit}) {
       commit('switchDialogUpdate')
+    },
+    switchDialogProfile ({commit}) {
+      commit('switchDialogProfile')
     },
     addMusic ({ getters, commit }, music) {
       if (getters.uid) {
