@@ -19,7 +19,7 @@ export default new Vuex.Store({
     comment: false,
     comment_key: 0,
     filtered_album: [],
-    profile: {}
+    profile: {name: 'ユーザー', profile_image: 'default_user_icon.png'}
   },
   mutations: {
     setLoginUser (state, user) {

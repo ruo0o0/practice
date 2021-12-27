@@ -3,15 +3,16 @@
     <v-card width="300">
       <v-list-item>
         <v-list-item-content class="py-2">
-          <v-list-item-title @click="doEdit" v-if="!edit" class="text-center mb-2">
-            {{ profile.name }}
+          <v-list-item-title v-if="!edit" class="text-center mb-2 ml-4">
+            {{ $store.state.profile.name }}
+            <v-icon small @click="doEdit">mdi-pencil</v-icon>
           </v-list-item-title>
           <v-list-item-title v-else class="text-center mb-2">
-            <input type="text" v-model="profile.name" @blur="edit = false" v-focus @keyup.enter.exact="edit = false">
+            <input type="text" v-model="profile.name" @blur="changeName" v-focus @keyup.enter.exact="changeName">
           </v-list-item-title>
           <input style="display: none" ref="input" type="file" accept="image/*" @change="fileUpload">
           <v-list-item-title class="mb-2">
-            <v-img width="128" :src="profileImage" aspect-ratio="1" class="mx-auto" @click="$refs.input.click()"></v-img>
+            <v-img width="128" :src="profileImage" aspect-ratio="1" class="mx-auto" @click="$refs.input.click(); setProfile()"></v-img>
           </v-list-item-title>
           <!-- <v-btn class="mx-auto">フォローする</v-btn> -->
         </v-list-item-content>
@@ -72,7 +73,7 @@
       </v-list>
     </v-card>
     <v-card width="600" class="ml-4" min-height="100">
-      <v-card-title class="subtitle-1 py-2">{{ profile.name }}さんの感想</v-card-title>
+      <v-card-title class="subtitle-1 py-2">{{ $store.state.profile.name }}さんの感想</v-card-title>
       <v-divider></v-divider>
       <div
         v-for="(music, index) in filteredAlbum"
@@ -85,7 +86,7 @@
             </v-avatar>
           </div>
           <div class="flex-grow">
-            <p class="ml-2 mb-2">{{ profile.name }}</p>
+            <p class="ml-2 mb-2">{{ $store.state.profile.name }}</p>
             <v-card color="grey darken-4" class="ma-2">
               <v-card-title class="subtitle-1">{{ music.title }}</v-card-title>
               <v-card-subtitle class="py-0">{{ music.artist }}</v-card-subtitle>
@@ -116,7 +117,7 @@ export default {
   data () {
     return {
       album: [],
-      profile: {name: 'Musaic'},
+      profile: {name: 'ユーザー', profile_image: 'default_user_icon.png'},
       edit: false,
     }
   },
@@ -132,8 +133,20 @@ export default {
     }
   },
   methods: {
+    setProfile () {
+      this.profile = this.$store.state.profile
+    },
     doEdit () {
       this.edit = true
+      this.setProfile()
+    },
+    changeName () {
+      if (this.$store.state.profile.id) {
+        this.updateProfile({id: this.$store.state.profile.id, profile: this.profile})
+      } else {
+        this.addProfile(this.profile)
+      }
+      this.edit = false
     },
     async fileUpload (event) {
       let file = event.target.files[0]
@@ -149,7 +162,7 @@ export default {
           that.$set(that.profile, 'profile_image', url)
         })
       }
-      if (this.$store.state.profile) {
+      if (this.$store.state.profile.id) {
         this.updateProfile({id: this.$store.state.profile.id, profile: this.profile})
       } else {
         this.addProfile(this.profile)
