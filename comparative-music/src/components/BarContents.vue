@@ -101,19 +101,17 @@ export default {
       }
     },
   },
-  beforeDestroy () {
-    this.audio.pause()
+  async beforeDestroy () {
+    await this.audio.pause()
   },
   methods: {
     play () {
       this.audio.play()
       this.isPlay = true
-      this.switchPlayState()
     },
     stop () {
       this.audio.pause()
       this.isPlay = false
-      this.switchPlayState()
     },
     rewind () {
       const index = this.album.findIndex(music => music.id == this.music.id)
@@ -137,7 +135,7 @@ export default {
     onChange (event) {
       this.audio.currentTime = (event / 100) * this.duration
     },
-    ...mapActions(['switchPlayState','switchCommentState','switchPlayerBar','switchBarContent','setMusicActive'])
+    ...mapActions(['switchCommentState','switchPlayerBar','switchBarContent','setMusicActive'])
   }
 }
 </script>

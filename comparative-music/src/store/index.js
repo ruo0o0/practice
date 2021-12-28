@@ -73,9 +73,6 @@ export default new Vuex.Store({
       state.music_active = music
       state.key++
     },
-    switchPlayState (state) {
-      state.isPlay = !state.isPlay
-    },
     switchCommentState (state) {
       state.comment = !state.comment
       state.comment_key++

@@ -74,7 +74,28 @@
       </v-list>
     </v-card>
     <v-card width="600" class="ml-4" min-height="100">
-      <v-card-title class="subtitle-1 py-2">{{ $store.state.profile.name }}さんの感想</v-card-title>
+      <v-row>
+        <v-col>
+          <v-card-title class="subtitle-1 py-3">{{ $store.state.profile.name }}さんの感想</v-card-title>
+        </v-col>
+        <v-col>
+          <v-card-title class="pa-0 pr-4">
+            <v-text-field
+            single-line
+            class="pt-0 mt-3"
+            v-model="keyword"
+            dense
+            placeholder="曲名・アーティスト名"
+            type="text"
+            @change="putFilteredAlbum(filteredAlbum)"
+            >
+            <template v-slot:append>
+            <v-icon color="grey darken-1">mdi-magnify</v-icon>
+            </template>
+            </v-text-field>
+          </v-card-title>
+        </v-col>
+      </v-row>
       <v-divider></v-divider>
       <div
         v-for="(music, index) in filteredAlbum"
@@ -89,14 +110,27 @@
           <div class="flex-grow">
             <p class="ml-2 mb-2">{{ $store.state.profile.name }}</p>
             <v-card color="grey darken-4" class="ma-2">
-              <v-card-title class="subtitle-1">{{ music.title }}</v-card-title>
-              <v-card-subtitle class="py-0">{{ music.artist }}</v-card-subtitle>
-              <v-card-text class="pb-0">
+              <div class="flex">
+                <div>
+                  <v-card-title class="subtitle-1 pt-2">{{ music.title }}</v-card-title>
+                  <v-card-subtitle class="py-0">{{ music.artist }}</v-card-subtitle>
+                </div>
+                <v-spacer></v-spacer>
+                <div>
+                  <v-card-title :class="{ 'pr-10': $vuetify.breakpoint.smAndUp }">
+                    <v-btn icon @click="play(music)">
+                      <v-icon large>mdi-play-circle-outline</v-icon>
+                    </v-btn>
+                  </v-card-title>
+                </div>
+              </div>
+              <v-card-text class="pb-0 pt-0 mt-n2">
                 <v-textarea
+                  class="mt-0"
                   background-color="#1E1E1E"
                   v-model="music.comment"
-                  readonly
                   loading="false"
+                  @blur="updateComment(index)"
                 >
                 </v-textarea>
               </v-card-text>
@@ -120,10 +154,12 @@ export default {
       album: [],
       profile: {name: 'ユーザー', profile_image: 'default_user_icon.png', comment: 'Write something you want to appeal.'},
       edit: false,
+      keyword: '',
     }
   },
   created () {
     this.album = this.$store.state.album
+    this.putFilteredAlbum(this.album)
     // this.profile = this.$store.state.profile
   },
   directives: {
@@ -134,6 +170,10 @@ export default {
     }
   },
   methods: {
+    play (music) {
+      this.switchBarContent(music)
+      this.switchPlayerBar()
+    },
     setProfile () {
       this.profile = this.$store.state.profile
     },
@@ -148,6 +188,9 @@ export default {
         this.addProfile(this.profile)
       }
       this.edit = false
+    },
+    updateComment (index) {
+      this.updateMusic({id: this.filteredAlbum[index].id, music: this.filteredAlbum[index]})
     },
     async fileUpload (event) {
       let file = event.target.files[0]
@@ -169,7 +212,7 @@ export default {
         this.addProfile(this.profile)
       }
     },
-    ...mapActions(['addProfile','updateProfile', 'switchDialogProfile'])
+    ...mapActions(['addProfile','updateProfile', 'switchDialogProfile','putFilteredAlbum','updateMusic','switchBarContent', 'switchPlayerBar'])
   },
   computed: {
     artists: function () {
@@ -179,7 +222,25 @@ export default {
       return (this.album.filter(music => music.comment)).length
     },
     filteredAlbum: function () {
-      return this.album.filter(music => music.comment)
+      const album = []
+      for (const i in this.album) {
+        let music = this.album[i]
+        if (music.title.indexOf(this.keyword) !== -1 ||
+            music.artist.indexOf(this.keyword) !== -1) {
+            album.push(music)
+        }
+      }
+      return album.filter(music => music.comment).sort((a,b) => {
+        let titleA = a.title.toUpperCase()
+        let titleB = b.title.toUpperCase()
+        if (titleA < titleB) {
+          return -1
+        }
+        if (titleA > titleB) {
+          return 1
+        }
+        return 0
+      })
     },
     profileImage: function () {
       if (this.$store.state.profile.profile_image) {
@@ -213,5 +274,12 @@ export default {
     outline: none;
     color: white;
     text-align: center;
+  }
+  .v-input {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  .v-text-field .v-label {
+    font-size: 1rem;
   }
 </style>
