@@ -76,7 +76,7 @@ export default {
     this.music = this.$store.state.music_active
     this.album = this.$store.state.filtered_album
   },
-  mounted () {
+  async mounted () {
     this.audio.src = this.music.audio_url
     this.audio.load()
     this.audio.addEventListener('loadedmetadata', () => {
@@ -89,7 +89,7 @@ export default {
     this.audio.addEventListener('ended', () => {
       this.next()
     })
-    this.play()
+    await this.play()
   },
   computed: {
     progress: {

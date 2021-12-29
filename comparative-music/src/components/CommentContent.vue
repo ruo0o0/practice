@@ -28,6 +28,13 @@
       >
         保存
       </v-btn>
+      <v-btn
+        color="red darken-1"
+        text
+        @click="switchCommentState(); deleteMusicComment()"
+      >
+        削除
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -44,10 +51,14 @@ export default {
     this.music = this.$store.state.music_active
   },
   methods: {
+    deleteMusicComment () {
+      delete this.music.comment
+      this.deleteComment({id: this.music.id, music: this.music})
+    },
     updateComment () {
       this.updateMusic({id: this.music.id, music: this.music})
     },
-    ...mapActions(['switchCommentState','updateMusic'])
+    ...mapActions(['switchCommentState','updateMusic', 'deleteComment'])
   }
 }
 </script>
