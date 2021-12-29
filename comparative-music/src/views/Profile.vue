@@ -8,7 +8,7 @@
             <v-icon small @click="doEdit">mdi-pencil</v-icon>
           </v-list-item-title>
           <v-list-item-title v-else class="text-center mb-2">
-            <input type="text" v-model="profile.name" @blur="changeName" v-focus @keyup.enter.exact="changeName">
+            <input type="text" v-model="profile.name" @blur="changeName" v-focus ref="blurThis" @keyup.enter.exact="blur">
           </v-list-item-title>
           <input style="display: none" ref="input" type="file" accept="image/*" @change="fileUpload">
           <v-list-item-title class="mb-2">
@@ -170,6 +170,9 @@ export default {
     }
   },
   methods: {
+    blur () {
+      this.$refs.blurThis.blur()
+    },
     play (music) {
       this.switchBarContent(music)
       this.switchPlayerBar()
@@ -230,7 +233,7 @@ export default {
             album.push(music)
         }
       }
-      return album.filter(music => music.comment).sort((a,b) => {
+      return album.filter(music => 'comment' in music).sort((a,b) => {
         let titleA = a.title.toUpperCase()
         let titleB = b.title.toUpperCase()
         if (titleA < titleB) {
