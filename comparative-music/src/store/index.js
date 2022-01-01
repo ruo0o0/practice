@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     album: [],
+    all_album: [],
     login_user: null,
     drawer: false,
     dialog: false,
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     comment_key: 0,
     filtered_album: [],
     profile: {name: 'ユーザー', profile_image: 'default_user_icon.png', comment: 'Write something you want to appeal.'},
+    all_profile: [],
     profile_key: 0
   },
   mutations: {
@@ -48,9 +50,17 @@ export default new Vuex.Store({
       music.id = id
       state.album.unshift(music)
     },
+    addAllMusic (state, {id, music}) {
+      music.id = id
+      state.all_album.unshift(music)
+    },
     addProfile (state, {id, profile}) {
       profile.id = id
       state.profile = profile
+    },
+    addAllProfile (state, {id, profile}) {
+      profile.id = id
+      state.all_profile.push(profile)
     },
     updateMusic (state, {id, music}) {
       const index = state.album.findIndex( music => music.id === id)
@@ -133,10 +143,18 @@ export default new Vuex.Store({
         snapshot.forEach(doc => commit('addMusic', { id: doc.id, music: doc.data() }))
       })
     },
+    fetchAllAlbum ({ commit }) {
+      firebase.firestore().collectionGroup('album').get().then(snapshot => {
+        snapshot.forEach(doc => commit('addAllMusic', {id: doc.id, music: doc.data()}))
+      })
+    },
     fetchProfile ({ getters, commit }) {
       firebase.firestore().collection(`users/${getters.uid}/profile`).get().then(snapshot => {
         snapshot.forEach(doc => commit('addProfile', { id: doc.id, profile: doc.data() }))
       })
+    },
+    fetchAllProfile ({ commit }) {
+      firebase.firestore().collectionGroup('profile').get().then(snapshot => snapshot.forEach(doc => commit('addAllProfile', {id: doc.id, profile: doc.data()})))
     },
     updateMusic ({ getters, commit }, {id, music}) {
       if (getters.uid) {

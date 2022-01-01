@@ -41,6 +41,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -56,9 +57,13 @@ export default {
       this.deleteComment({id: this.music.id, music: this.music})
     },
     updateComment () {
+      this.$set(this.music, 'user_id', this.uid)
       this.updateMusic({id: this.music.id, music: this.music})
     },
     ...mapActions(['switchCommentState','updateMusic', 'deleteComment'])
+  },
+  computed: {
+    ...mapGetters(['uid'])
   }
 }
 </script>

@@ -3,18 +3,12 @@
     <v-card width="300">
       <v-list-item>
         <v-list-item-content class="py-2">
-          <v-list-item-title v-if="!edit" class="text-center mb-2 ml-4">
+          <v-list-item-title class="text-center mb-2 ml-4">
             {{ $store.state.profile.name }}
-            <v-icon small @click="doEdit">mdi-pencil</v-icon>
           </v-list-item-title>
-          <v-list-item-title v-else class="text-center mb-2">
-            <input type="text" v-model="profile.name" @blur="changeName" v-focus ref="blurThis" @keyup.enter.exact="blur">
-          </v-list-item-title>
-          <input style="display: none" ref="input" type="file" accept="image/*" @change="fileUpload">
           <v-list-item-title class="mb-2">
-            <v-img width="128" :src="profileImage" aspect-ratio="1" class="mx-auto" @click="$refs.input.click(); setProfile()"></v-img>
+            <v-img width="128" :src="myImage" aspect-ratio="1" class="mx-auto"></v-img>
           </v-list-item-title>
-          <!-- <v-btn class="mx-auto">フォローする</v-btn> -->
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
@@ -68,7 +62,6 @@
         <v-divider></v-divider>
         <v-list-item>
           <v-list-item-title>自己紹介</v-list-item-title>
-          <v-icon small @click="switchDialogProfile">mdi-pencil</v-icon>
         </v-list-item>
         <p class="font-size px-4">{{ $store.state.profile.comment }}</p>
       </v-list>
@@ -76,7 +69,7 @@
     <v-card width="600" class="ml-4" min-height="100">
       <v-row>
         <v-col>
-          <v-card-title class="subtitle-1 py-3">{{ $store.state.profile.name }}さんの感想</v-card-title>
+          <v-card-title class="subtitle-1 py-3">みんなの感想</v-card-title>
         </v-col>
         <v-col>
           <v-card-title class="pa-0 pr-4">
@@ -87,7 +80,6 @@
             dense
             placeholder="曲名・アーティスト名"
             type="text"
-            @change="putFilteredAlbum(filteredAlbum)"
             >
             <template v-slot:append>
             <v-icon color="grey darken-1">mdi-magnify</v-icon>
@@ -104,33 +96,21 @@
         <div class="flex mt-2 ml-2">
           <div>
             <v-avatar tile rounded="sm">
-              <v-img :src="profileImage" aspect-ratio="1"></v-img>
+              <v-img :src="profileImage(music.user_id)" aspect-ratio="1"></v-img>
             </v-avatar>
           </div>
           <div class="flex-grow">
-            <p class="ml-2 mb-2">{{ $store.state.profile.name }}</p>
+            <p class="ml-2 mb-2">{{ profileName(music.user_id) }}</p>
             <v-card color="grey darken-4" class="ma-2">
-              <div class="flex">
-                <div>
-                  <v-card-title class="subtitle-1 pt-2">{{ music.title }}</v-card-title>
-                  <v-card-subtitle class="py-0">{{ music.artist }}</v-card-subtitle>
-                </div>
-                <v-spacer></v-spacer>
-                <div>
-                  <v-card-title :class="{ 'pr-10': $vuetify.breakpoint.smAndUp }">
-                    <v-btn icon @click="play(music)">
-                      <v-icon large>mdi-play-circle-outline</v-icon>
-                    </v-btn>
-                  </v-card-title>
-                </div>
-              </div>
+              <v-card-title class="subtitle-1 pt-2">{{ music.title }}</v-card-title>
+              <v-card-subtitle class="py-0">{{ music.artist }}</v-card-subtitle>
               <v-card-text class="pb-0 pt-0 mt-n2">
                 <v-textarea
                   class="mt-0"
                   background-color="#1E1E1E"
                   v-model="music.comment"
                   loading="false"
-                  @blur="updateComment(index)"
+                  readonly
                 >
                 </v-textarea>
               </v-card-text>
@@ -144,80 +124,26 @@
 </template>
 
 <script>
-import firebase from 'firebase'
-import "firebase/storage"
 import { mapActions } from 'vuex'
-import { mapGetters } from 'vuex'
+import "firebase/storage"
 export default {
   data () {
     return {
       album: [],
+      all_album: [],
+      all_profile: [],
       profile: {name: 'ユーザー', profile_image: 'default_user_icon.png', comment: 'Write something you want to appeal.'},
-      edit: false,
       keyword: '',
     }
   },
   created () {
+    this.fetchAllProfile()
     this.album = this.$store.state.album
-    this.putFilteredAlbum(this.album)
-    // this.profile = this.$store.state.profile
-  },
-  directives: {
-    focus: {
-      inserted: function (el) {
-        el.focus()
-      }
-    }
+    this.all_album = this.$store.state.all_album
+    this.all_profile = this.$store.state.all_profile
   },
   methods: {
-    blur () {
-      this.$refs.blurThis.blur()
-    },
-    play (music) {
-      this.switchBarContent(music)
-      this.switchPlayerBar()
-    },
-    setProfile () {
-      this.profile = this.$store.state.profile
-    },
-    doEdit () {
-      this.edit = true
-      this.setProfile()
-    },
-    changeName () {
-      this.$set(this.profile, 'user_id', this.uid)
-      if (this.$store.state.profile.id) {
-        this.updateProfile({id: this.$store.state.profile.id, profile: this.profile})
-      } else {
-        this.addProfile(this.profile)
-      }
-      this.edit = false
-    },
-    updateComment (index) {
-      this.updateMusic({id: this.filteredAlbum[index].id, music: this.filteredAlbum[index]})
-    },
-    async fileUpload (event) {
-      this.$set(this.profile, 'user_id', this.uid)
-      let file = event.target.files[0]
-      const storageImage = firebase.storage().ref("profile_images/" + file.name)
-      const that = this
-      await storageImage.getDownloadURL().then(onResolve, onReject)
-      function onResolve(url) {
-        that.$set(that.profile, 'profile_image', url)
-      }
-      async function onReject () {
-        await storageImage.put(file)
-        await storageImage.getDownloadURL().then(url => {
-          that.$set(that.profile, 'profile_image', url)
-        })
-      }
-      if (this.$store.state.profile.id) {
-        this.updateProfile({id: this.$store.state.profile.id, profile: this.profile})
-      } else {
-        this.addProfile(this.profile)
-      }
-    },
-    ...mapActions(['addProfile','updateProfile', 'switchDialogProfile','putFilteredAlbum','updateMusic','switchBarContent', 'switchPlayerBar'])
+    ...mapActions(['fetchAllProfile'])
   },
   computed: {
     artists: function () {
@@ -228,8 +154,8 @@ export default {
     },
     filteredAlbum: function () {
       const album = []
-      for (const i in this.album) {
-        let music = this.album[i]
+      for (const i in this.all_album) {
+        let music = this.all_album[i]
         if (music.title.indexOf(this.keyword) !== -1 ||
             music.artist.indexOf(this.keyword) !== -1) {
             album.push(music)
@@ -247,14 +173,43 @@ export default {
         return 0
       })
     },
-    profileImage: function () {
+    myImage: function () {
       if (this.$store.state.profile.profile_image) {
         return this.$store.state.profile.profile_image
       } else {
         return 'default_user_icon.png'
       }
     },
-    ...mapGetters(['uid'])
+    profileImage: function () {
+      return function(id) {
+        const all_profile = this.$store.state.all_profile
+        const index = all_profile.findIndex(profile => profile.user_id === id)
+        if (index === -1) {
+          return 'default_user_icon.png'
+        } else {
+          if (all_profile[index].profile_image) {
+            return all_profile[index].profile_image
+          } else {
+            return 'default_user_icon.png'
+          }
+        }
+      }
+    },
+    profileName: function () {
+      return function(id) {
+        const all_profile = this.$store.state.all_profile
+        const index = all_profile.findIndex(profile => profile.user_id === id)
+        if (index === -1) {
+          return 'ユーザー'
+        } else {
+          if (all_profile[index].name) {
+            return all_profile[index].name
+          } else {
+            return 'ユーザー'
+          }
+        }
+      }
+    }
   }
 }
 </script>

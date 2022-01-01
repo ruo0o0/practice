@@ -32,6 +32,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -49,6 +50,7 @@ export default {
       this.switchDialogProfile()
     },
     saveComment () {
+      this.$set(this.profile, 'user_id', this.uid)
       if (this.$store.state.profile.id) {
         this.updateProfile({id: this.$store.state.profile.id, profile: this.profile})
       } else {
@@ -57,6 +59,9 @@ export default {
       this.switchDialogProfile()
     },
     ...mapActions(['switchDialogProfile', 'addProfile', 'updateProfile'])
+  },
+  computed: {
+    ...mapGetters(['uid'])
   }
 }
 </script>

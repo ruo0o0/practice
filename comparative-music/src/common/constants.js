@@ -8,5 +8,9 @@ export default {
       name: 'プロフィール',
       url: '/profile'
     },
+    {
+      name: 'みんなの感想',
+      url: '/comments'
+    }
   ]
 }
