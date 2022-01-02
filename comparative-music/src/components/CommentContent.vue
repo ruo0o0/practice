@@ -59,6 +59,9 @@ export default {
     },
     updateComment () {
       this.$set(this.music, 'user_id', this.uid)
+      if (!this.music.date) {
+        this.$set(this.music, 'date', Date.now())
+      }
       this.updateMusic({id: this.music.id, music: this.music})
       this.updateMusicInAll({id: this.music.id, music: this.music})
       console.log(this.music)

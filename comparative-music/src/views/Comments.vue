@@ -164,12 +164,12 @@ export default {
         }
       }
       return album.filter(music => music.comment).sort((a,b) => {
-        let titleA = a.title.toUpperCase()
-        let titleB = b.title.toUpperCase()
-        if (titleA < titleB) {
+        let dateA = a.date
+        let dateB = b.date
+        if (dateA > dateB) {
           return -1
         }
-        if (titleA > titleB) {
+        if (dateA < dateB) {
           return 1
         }
         return 0
