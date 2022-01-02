@@ -194,7 +194,9 @@ export default {
       this.edit = false
     },
     updateComment (index) {
-      this.updateMusic({id: this.filteredAlbum[index].id, music: this.filteredAlbum[index]})
+      const filteredMusic = this.filteredAlbum[index]
+      this.updateMusic({id: filteredMusic.id, music: filteredMusic})
+      this.updateMusicInAll({id: filteredMusic.id, music: filteredMusic})
     },
     async fileUpload (event) {
       this.$set(this.profile, 'user_id', this.uid)
@@ -217,7 +219,7 @@ export default {
         this.addProfile(this.profile)
       }
     },
-    ...mapActions(['addProfile','updateProfile', 'switchDialogProfile','putFilteredAlbum','updateMusic','switchBarContent', 'switchPlayerBar'])
+    ...mapActions(['addProfile','updateProfile', 'switchDialogProfile','putFilteredAlbum','updateMusic','switchBarContent', 'switchPlayerBar', 'updateMusicInAll'])
   },
   computed: {
     artists: function () {
@@ -229,7 +231,7 @@ export default {
     filteredAlbum: function () {
       const album = []
       for (const i in this.album) {
-        let music = this.album[i]
+        const music = this.album[i]
         if (music.title.indexOf(this.keyword) !== -1 ||
             music.artist.indexOf(this.keyword) !== -1) {
             album.push(music)

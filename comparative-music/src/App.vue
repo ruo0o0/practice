@@ -70,7 +70,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['setLoginUser','deleteLoginUser','fetchAlbum','fetchProfile','fetchAllAlbum'])
+    ...mapActions(['setLoginUser','deleteLoginUser','fetchAlbum','fetchProfile', 'fetchAllAlbum'])
   },
   computed: {
     ...mapGetters(['userName', 'photoURL'])

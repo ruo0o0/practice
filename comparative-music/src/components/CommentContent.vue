@@ -55,12 +55,15 @@ export default {
     deleteMusicComment () {
       delete this.music.comment
       this.deleteComment({id: this.music.id, music: this.music})
+      this.deleteCommentInAll({id: this.music.id, music: this.music})
     },
     updateComment () {
       this.$set(this.music, 'user_id', this.uid)
       this.updateMusic({id: this.music.id, music: this.music})
+      this.updateMusicInAll({id: this.music.id, music: this.music})
+      console.log(this.music)
     },
-    ...mapActions(['switchCommentState','updateMusic', 'deleteComment'])
+    ...mapActions(['switchCommentState','updateMusic', 'deleteComment','updateMusicInAll', 'deleteCommentInAll'])
   },
   computed: {
     ...mapGetters(['uid'])

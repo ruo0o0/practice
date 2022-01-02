@@ -103,7 +103,7 @@
             <p class="ml-2 mb-2">{{ profileName(music.user_id) }}</p>
             <v-card color="grey darken-4" class="ma-2">
               <v-card-title class="subtitle-1 pt-2">{{ music.title }}</v-card-title>
-              <v-card-subtitle class="py-0">{{ music.artist }}</v-card-subtitle>
+              <v-card-subtitle class="pt-0 pb-2">{{ music.artist }}</v-card-subtitle>
               <v-card-text class="pb-0 pt-0 mt-n2">
                 <v-textarea
                   class="mt-0"
@@ -137,7 +137,9 @@ export default {
     }
   },
   created () {
-    this.fetchAllProfile()
+    if (!this.$store.state.all_profile.length) {
+      this.fetchAllProfile()
+    }
     this.album = this.$store.state.album
     this.all_album = this.$store.state.all_album
     this.all_profile = this.$store.state.all_profile
@@ -155,13 +157,13 @@ export default {
     filteredAlbum: function () {
       const album = []
       for (const i in this.all_album) {
-        let music = this.all_album[i]
+        const music = this.all_album[i]
         if (music.title.indexOf(this.keyword) !== -1 ||
             music.artist.indexOf(this.keyword) !== -1) {
             album.push(music)
         }
       }
-      return album.filter(music => 'comment' in music).sort((a,b) => {
+      return album.filter(music => music.comment).sort((a,b) => {
         let titleA = a.title.toUpperCase()
         let titleB = b.title.toUpperCase()
         if (titleA < titleB) {

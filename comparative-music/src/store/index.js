@@ -66,12 +66,20 @@ export default new Vuex.Store({
       const index = state.album.findIndex( music => music.id === id)
       state.album[index] = music
     },
+    updateMusicInAll (state, {id, music}) {
+      const index = state.all_album.findIndex(music => music.id === id)
+      state.all_album[index] = music
+    },
     updateProfile (state, profile) {
       state.profile = profile
     },
     deleteMusic (state, {id}) {
       const index = state.album.findIndex( music => music.id === id)
       state.album.splice(index, 1)
+    },
+    deleteCommentInAll (state, {id}) {
+      const index = state.all_album.findIndex(music => music.id === id)
+      delete state.all_album[index].comment
     },
     deleteComment (state, {id}) {
       const index = state.album.findIndex( music => music.id === id)
@@ -163,6 +171,9 @@ export default new Vuex.Store({
         })
       }
     },
+    updateMusicInAll ({ commit }, {id, music}) {
+      commit('updateMusicInAll', { id, music })
+    },
     updateProfile ({ getters, commit }, {id, profile}) {
       if (getters.uid) {
         firebase.firestore().collection(`users/${getters.uid}/profile`).doc(id).update(profile).then(() => {
@@ -176,6 +187,9 @@ export default new Vuex.Store({
         commit('deleteMusic', { id })
         })
       }
+    },
+    deleteCommentInAll ({ commit }, {id}) {
+      commit('deleteCommentInAll', {id})
     },
     deleteComment ({ getters, commit }, {id}) {
       if (getters.uid) {
