@@ -17,10 +17,10 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
-            <v-file-input accept="audio/*" label="楽曲を選択" :value="file_audio" @change="inputAudioFile" v-if="show"></v-file-input>
+            <v-file-input accept="audio/*" label="楽曲を選択" :value="file_audio" @change="inputAudioFile" v-if="show" small-chips></v-file-input>
           </v-col>
           <v-col cols="12" sm="6">
-            <v-file-input accept="image/*" label="画像を選択" :value="file_image" @change="inputImageFile" v-if="show"></v-file-input>
+            <v-file-input accept="image/*" label="画像を選択" :value="file_image" @change="inputImageFile" v-if="show" small-chips></v-file-input>
           </v-col>
         </v-row>
       </v-container>
@@ -67,13 +67,19 @@ import { mapActions } from 'vuex'
     },
     created () {
       this.music = this.$store.state.music_tmp
+      const image_url = this.music.image_url.match(/%2F(.+)\?/)[1]
+      const audio_url = this.music.audio_url.match(/%2F(.+)\?/)[1]
+      fetch(this.music.file_image).then(response => response.blob()).then(blob => new File([blob], image_url)).then(file => this.file_image = file)
+      fetch(this.music.file_audio).then(response => response.blob()).then(blob => new File([blob], audio_url)).then(file => this.file_audio = file)
     },
     methods: {
       inputImageFile (event) {
         this.file_image = event
+        console.log(this.file_image)
       },
       inputAudioFile (event) {
         this.file_audio = event
+        console.log(this.file_audio)
       },
       deleteConfirm (id) {
         if (confirm('この楽曲を削除してよろしいですか?')) {
