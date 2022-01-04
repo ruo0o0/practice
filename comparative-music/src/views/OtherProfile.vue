@@ -4,10 +4,10 @@
       <v-list-item>
         <v-list-item-content class="py-2">
           <v-list-item-title class="text-center mb-2">
-            {{ $store.state.profile.name }}
+            {{ profileName }}
           </v-list-item-title>
           <v-list-item-title class="mb-2">
-            <v-img width="128" :src="myImage" aspect-ratio="1" class="mx-auto"></v-img>
+            <v-img width="128" :src="profileImage" aspect-ratio="1" class="mx-auto"></v-img>
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -46,30 +46,17 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <!-- <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>フォロー</v-list-item-title>
-          </v-list-item-content>
-          <p class="text-body-2 my-2" >3人</p>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>フォロワー</v-list-item-title>
-          </v-list-item-content>
-          <p class="text-body-2 my-2" >3人</p>
-        </v-list-item> -->
         <v-divider></v-divider>
         <v-list-item>
           <v-list-item-title>自己紹介</v-list-item-title>
         </v-list-item>
-        <p class="font-size px-4">{{ $store.state.profile.comment }}</p>
+        <p class="font-size px-4">{{ profileComment }}</p>
       </v-list>
     </v-card>
     <v-card width="600" class="ml-4" min-height="100">
       <v-row>
         <v-col>
-          <v-card-title class="subtitle-1 py-3">みんなの感想</v-card-title>
+          <v-card-title class="subtitle-1 py-3">{{ profileName }}さんの感想</v-card-title>
         </v-col>
         <v-col>
           <v-card-title class="pa-0 pr-4">
@@ -95,15 +82,24 @@
       >
         <div class="flex mt-2 ml-2">
           <div>
-            <v-avatar tile rounded="sm" @click="music.user_id === uid ? $router.push({name: 'Profile'}) : $router.push({name: 'OtherProfile', params: {user_id: music.user_id}})">
-              <v-img :src="profileImage(music.user_id)" aspect-ratio="1"></v-img>
+            <v-avatar tile rounded="sm">
+              <v-img :src="profileImage" aspect-ratio="1"></v-img>
             </v-avatar>
           </div>
           <div class="flex-grow">
-            <p class="ml-2 mb-2">{{ profileName(music.user_id) }}</p>
+            <p class="ml-2 mb-2">{{ profileName }}</p>
             <v-card color="grey darken-4" class="ma-2">
-              <v-card-title class="subtitle-1 pt-2">{{ music.title }}</v-card-title>
-              <v-card-subtitle class="pt-0 pb-2">{{ music.artist }}</v-card-subtitle>
+              <div class="flex">
+                <div>
+                  <v-card-title class="subtitle-1 pt-2">{{ music.title }}</v-card-title>
+                  <v-card-subtitle class="py-0">{{ music.artist }}</v-card-subtitle>
+                </div>
+                <v-spacer></v-spacer>
+                <div>
+                  <v-card-title :class="{ 'pr-10': $vuetify.breakpoint.smAndUp }">
+                  </v-card-title>
+                </div>
+              </div>
               <v-card-text class="pb-0 pt-0 mt-n2">
                 <v-textarea
                   class="mt-0"
@@ -124,29 +120,15 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import { mapGetters } from 'vuex'
-import "firebase/storage"
 export default {
   data () {
     return {
       album: [],
-      all_album: [],
-      all_profile: [],
-      profile: {name: 'ユーザー', profile_image: 'default_user_icon.png', comment: 'Write something you want to appeal.'},
       keyword: '',
     }
   },
   created () {
-    if (!this.$store.state.all_profile.length) {
-      this.fetchAllProfile()
-    }
-    this.album = this.$store.state.album
-    this.all_album = this.$store.state.all_album
-    this.all_profile = this.$store.state.all_profile
-  },
-  methods: {
-    ...mapActions(['fetchAllProfile'])
+    this.album = this.$store.state.all_album.filter(music => music.user_id === this.$route.params.user_id)
   },
   computed: {
     artists: function () {
@@ -157,36 +139,28 @@ export default {
     },
     filteredAlbum: function () {
       const album = []
-      for (const i in this.all_album) {
-        const music = this.all_album[i]
+      for (const i in this.album) {
+        const music = this.album[i]
         if (music.title.indexOf(this.keyword) !== -1 ||
             music.artist.indexOf(this.keyword) !== -1) {
             album.push(music)
         }
       }
       return album.filter(music => music.comment).sort((a,b) => {
-        let dateA = a.date
-        let dateB = b.date
-        if (dateA > dateB) {
+        let titleA = a.title.toUpperCase()
+        let titleB = b.title.toUpperCase()
+        if (titleA < titleB) {
           return -1
         }
-        if (dateA < dateB) {
+        if (titleA > titleB) {
           return 1
         }
         return 0
       })
     },
-    myImage: function () {
-      if (this.$store.state.profile.profile_image) {
-        return this.$store.state.profile.profile_image
-      } else {
-        return 'default_user_icon.png'
-      }
-    },
     profileImage: function () {
-      return function(id) {
         const all_profile = this.$store.state.all_profile
-        const index = all_profile.findIndex(profile => profile.user_id === id)
+        const index = all_profile.findIndex(profile => profile.user_id === this.$route.params.user_id)
         if (index === -1) {
           return 'default_user_icon.png'
         } else {
@@ -196,12 +170,10 @@ export default {
             return 'default_user_icon.png'
           }
         }
-      }
     },
     profileName: function () {
-      return function(id) {
         const all_profile = this.$store.state.all_profile
-        const index = all_profile.findIndex(profile => profile.user_id === id)
+        const index = all_profile.findIndex(profile => profile.user_id === this.$route.params.user_id)
         if (index === -1) {
           return 'ユーザー'
         } else {
@@ -211,9 +183,20 @@ export default {
             return 'ユーザー'
           }
         }
-      }
     },
-    ...mapGetters(['uid'])
+    profileComment: function () {
+        const all_profile = this.$store.state.all_profile
+        const index = all_profile.findIndex(profile => profile.user_id === this.$route.params.user_id)
+        if (index === -1) {
+          return '自己紹介がありません'
+        } else {
+          if (all_profile[index].comment) {
+            return all_profile[index].comment
+          } else {
+            return '自己紹介がありません'
+          }
+        }
+    },
   }
 }
 </script>

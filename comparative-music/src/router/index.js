@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Profile from '../views/Profile.vue'
 import Comments from '../views/Comments.vue'
+import OtherProfile from '../views/OtherProfile.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,11 @@ const routes = [
     name: 'Comments',
     component: Comments
   },
+  {
+    path: '/other_profile/:user_id?',
+    name: 'OtherProfile',
+    component: OtherProfile
+  }
 ]
 
 const router = new VueRouter({
