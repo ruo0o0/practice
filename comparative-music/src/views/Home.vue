@@ -96,11 +96,15 @@ export default {
   },
   methods: {
     mouseHover (index) {
-      this.hoverFlag = true
-      this.hoverIndex = index
+      setTimeout(() => {
+        this.hoverFlag = true
+        this.hoverIndex = index
+      }, 100)
     },
     mouseLeave () {
-      this.hoverFlag = false
+      setTimeout(() => {
+        this.hoverFlag = false
+      }, 100)
     },
     play (music) {
       this.switchBarContent(music)
