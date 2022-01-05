@@ -58,6 +58,13 @@ export default new Vuex.Store({
       profile.id = id
       state.profile = profile
     },
+    addProfileInAll (state, profile) {
+      state.all_profile.push(profile)
+    },
+    updateProfileInAll (state, {id, profile}) {
+      const index = state.all_profile.findIndex(profile => profile.user_id === id)
+      state.all_profile[index] = profile
+    },
     addAllProfile (state, {id, profile}) {
       profile.id = id
       state.all_profile.push(profile)
@@ -145,6 +152,12 @@ export default new Vuex.Store({
           commit('addProfile', { id: doc.id, profile })
         })
       }
+    },
+    addProfileInAll ({ commit }, profile) {
+      commit('addProfileInAll', profile)
+    },
+    updateProfileInAll ({ commit }, {id, profile}) {
+      commit('updateProfileInAll', {id, profile})
     },
     fetchAlbum ({ getters, commit }) {
       firebase.firestore().collection(`users/${getters.uid}/album`).get().then(snapshot => {

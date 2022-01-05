@@ -188,8 +188,10 @@ export default {
       this.$set(this.profile, 'user_id', this.uid)
       if (this.$store.state.profile.id) {
         this.updateProfile({id: this.$store.state.profile.id, profile: this.profile})
+        this.updateProfileInAll({id: this.profile.user_id, profile: this.profile})
       } else {
         this.addProfile(this.profile)
+        this.addProfileInAll(this.profile)
       }
       this.edit = false
     },
@@ -215,11 +217,13 @@ export default {
       }
       if (this.$store.state.profile.id) {
         this.updateProfile({id: this.$store.state.profile.id, profile: this.profile})
+        this.updateProfileInAll({id: this.profile.user_id, profile: this.profile})
       } else {
         this.addProfile(this.profile)
+        this.addProfileInAll(this.profile)
       }
     },
-    ...mapActions(['addProfile','updateProfile', 'switchDialogProfile','putFilteredAlbum','updateMusic','switchBarContent', 'switchPlayerBar', 'updateMusicInAll'])
+    ...mapActions(['addProfile','updateProfile', 'switchDialogProfile','putFilteredAlbum','updateMusic','switchBarContent', 'switchPlayerBar', 'updateMusicInAll', 'addProfileInAll', 'updateProfileInAll'])
   },
   computed: {
     artists: function () {
