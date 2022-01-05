@@ -58,7 +58,6 @@ export default {
       this.deleteCommentInAll({id: this.music.id, music: this.music})
     },
     updateComment () {
-      this.$set(this.music, 'user_id', this.uid)
       if (!this.music.date) {
         this.$set(this.music, 'date', Date.now())
       }

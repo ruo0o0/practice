@@ -57,6 +57,7 @@
 import firebase from 'firebase'
 import "firebase/storage"
 import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
   export default {
     data () {
       return {
@@ -74,6 +75,7 @@ import { mapActions } from 'vuex'
         this.file_audio = event
       },
       async fileUpload () {
+        this.$set(this.music, 'user_id', this.uid)
         const storageImage = firebase.storage().ref("images/" + this.file_image.name)
         const storageAudio = firebase.storage().ref("audios/" + this.file_audio.name)
         const that = this
@@ -105,6 +107,9 @@ import { mapActions } from 'vuex'
         })
       },
       ...mapActions(['switchDialog','addMusic'])
+    },
+    computed: {
+      ...mapGetters(['uid'])
     }
   }
 </script>
