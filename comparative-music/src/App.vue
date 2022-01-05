@@ -14,7 +14,6 @@
         <router-view></router-view>
       </v-container>
     </v-content>
-    <!-- <Loading v-show="loading"></Loading> -->
     <footer>
     </footer>
   </v-app>
@@ -29,7 +28,6 @@ import UpdateForm from './components/UpdateForm.vue'
 import PlayerBar from './components/PlayerBar.vue'
 import CommentField from './components/CommentField.vue'
 import ProfileComment from './components/ProfileComment.vue'
-// import Loading from './components/Loading.vue'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 
@@ -43,18 +41,7 @@ export default {
     PlayerBar,
     CommentField,
     ProfileComment
-    // Loading
   },
-  // mounted () {
-  //   setTimeout(() => {
-  //     this.loading = false
-  //   }, 3000)
-  // },
-  // data () {
-  //   return {
-  //     loading: true
-  //   }
-  // },
   created () {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -99,7 +86,6 @@ export default {
 
     @include display_pc {
       display: block !important;
-      // margin-left: 50px !important
     }
   }
 </style>

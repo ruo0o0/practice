@@ -63,7 +63,6 @@ export default {
       }
       this.updateMusic({id: this.music.id, music: this.music})
       this.updateMusicInAll({id: this.music.id, music: this.music})
-      console.log(this.music)
     },
     ...mapActions(['switchCommentState','updateMusic', 'deleteComment','updateMusicInAll', 'deleteCommentInAll'])
   },

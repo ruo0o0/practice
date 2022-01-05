@@ -50,7 +50,6 @@ export default {
 
     @include display_pc {
       display: block !important;
-      // margin-left: 50px !important
     }
   }
 </style>

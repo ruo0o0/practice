@@ -75,11 +75,9 @@ import { mapActions } from 'vuex'
     methods: {
       inputImageFile (event) {
         this.file_image = event
-        console.log(this.file_image)
       },
       inputAudioFile (event) {
         this.file_audio = event
-        console.log(this.file_audio)
       },
       deleteConfirm (id) {
         if (confirm('この楽曲を削除してよろしいですか?')) {

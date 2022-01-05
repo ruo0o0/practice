@@ -46,19 +46,6 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <!-- <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>フォロー</v-list-item-title>
-          </v-list-item-content>
-          <p class="text-body-2 my-2" >3人</p>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>フォロワー</v-list-item-title>
-          </v-list-item-content>
-          <p class="text-body-2 my-2" >3人</p>
-        </v-list-item> -->
         <v-divider></v-divider>
         <v-list-item>
           <v-list-item-title>自己紹介</v-list-item-title>

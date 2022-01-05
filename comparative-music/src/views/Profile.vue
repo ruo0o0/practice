@@ -14,7 +14,6 @@
           <v-list-item-title class="mb-2">
             <v-img width="128" :src="profileImage" aspect-ratio="1" class="mx-auto" @click="$refs.input.click(); setProfile()"></v-img>
           </v-list-item-title>
-          <!-- <v-btn class="mx-auto">フォローする</v-btn> -->
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
@@ -52,19 +51,6 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <!-- <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>フォロー</v-list-item-title>
-          </v-list-item-content>
-          <p class="text-body-2 my-2" >3人</p>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>フォロワー</v-list-item-title>
-          </v-list-item-content>
-          <p class="text-body-2 my-2" >3人</p>
-        </v-list-item> -->
         <v-divider></v-divider>
         <v-list-item>
           <v-list-item-title>自己紹介</v-list-item-title>
@@ -160,7 +146,6 @@ export default {
   created () {
     this.album = this.$store.state.album
     this.putFilteredAlbum(this.album)
-    // this.profile = this.$store.state.profile
   },
   directives: {
     focus: {
