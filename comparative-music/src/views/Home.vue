@@ -37,8 +37,8 @@
         cols="4" sm="3" md="2"
       >
         <v-img
-          :lazy-src="music.image_url"
-          :src="music.image_url"
+          :lazy-src="music.image_url.match(/%2F(.+)\?/)[1] !== 'undefined' ? music.image_url: 'undefined.jpeg'"
+          :src="music.image_url.match(/%2F(.+)\?/)[1] !== 'undefined' ? music.image_url: 'undefined.jpeg'"
           aspect-ratio="1"
           class="grey lighten-2"
           @mouseover="mouseHover(index)"
@@ -52,7 +52,7 @@
               align="center"
               justify="center"
             >
-              <v-btn icon @click.stop="play(music)" v-if="hoverFlag && index === hoverIndex">
+              <v-btn icon @click.stop="play(music)" v-if="hoverFlag && index === hoverIndex && music.audio_url.match(/%2F(.+)\?/)[1] !== 'undefined'">
                 <v-icon x-large @mouseover="mouseHover(index)" @mouseleave="mouseLeave" >mdi-play-circle-outline</v-icon>
               </v-btn>
             </v-row>

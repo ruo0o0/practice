@@ -61,11 +61,11 @@
     </v-card>
     <v-card width="600" class="ml-4" min-height="100">
       <v-row>
-        <v-col>
+        <v-col class="d-none d-sm-flex">
           <v-card-title class="subtitle-1 py-3">{{ $store.state.profile.name }}さんの感想</v-card-title>
         </v-col>
         <v-col>
-          <v-card-title class="pa-0 pr-4">
+          <v-card-title class="pa-0 px-4">
             <v-text-field
             single-line
             class="pt-0 mt-3"
@@ -103,8 +103,8 @@
                 </div>
                 <v-spacer></v-spacer>
                 <div>
-                  <v-card-title :class="{ 'pr-10': $vuetify.breakpoint.smAndUp }">
-                    <v-btn icon @click="play(music)">
+                  <v-card-title :class="[{ 'pr-10': $vuetify.breakpoint.smAndUp }, 'pl-0']">
+                    <v-btn icon @click="play(music)" v-if="music.audio_url.match(/%2F(.+)\?/)[1] !== 'undefined'">
                       <v-icon large>mdi-play-circle-outline</v-icon>
                     </v-btn>
                   </v-card-title>
