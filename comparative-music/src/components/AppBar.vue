@@ -4,14 +4,14 @@
       <img :src="photoURL">
     </v-avatar>
     <v-toolbar-title>
-      Musaic
+      Music Album
     </v-toolbar-title>
     <v-toolbar-items v-if="$store.state.login_user">
       <v-btn text @click="logout">ログアウト</v-btn>
     </v-toolbar-items>
     <v-tabs v-if="$store.state.login_user" right optional>
-      <v-tab to="/home">ホーム</v-tab>
-      <v-tab to="/profile">プロフィール</v-tab>
+      <v-tab to="/home">アルバム</v-tab>
+      <v-tab to="/profile">マイページ</v-tab>
       <v-tab to="/comments">みんなの感想</v-tab>
     </v-tabs>
     <v-spacer></v-spacer>

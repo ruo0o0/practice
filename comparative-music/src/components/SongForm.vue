@@ -23,10 +23,10 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-file-input accept="audio/*" label="楽曲を選択" @change="inputAudioFile" v-if="show" small-chips></v-file-input>
+                <v-file-input accept="audio/*" label="楽曲を選択" @change="inputAudioFile" v-if="show" small-chips prepend-icon="mdi-file-music-outline"></v-file-input>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-file-input accept="image/*" label="画像を選択" @change="inputImageFile" v-if="show" small-chips></v-file-input>
+                <v-file-input accept="image/*" label="画像を選択" @change="inputImageFile" v-if="show" small-chips prepend-icon="mdi-file-image-outline"></v-file-input>
               </v-col>
             </v-row>
           </v-container>
@@ -43,7 +43,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="fileUpload(); switchDialog()"
+            @click="fileUpload()"
           >
             作成
           </v-btn>
@@ -75,6 +75,11 @@ import { mapGetters } from 'vuex'
         this.file_audio = event
       },
       async fileUpload () {
+        if (!this.music.title || !this.music.artist) {
+          alert('曲名・アーティスト名を入力してください。')
+          return
+        }
+        this.switchDialog()
         this.$set(this.music, 'user_id', this.uid)
         const storageImage = firebase.storage().ref("images/" + this.file_image.name)
         const storageAudio = firebase.storage().ref("audios/" + this.file_audio.name)

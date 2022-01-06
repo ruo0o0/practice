@@ -17,10 +17,10 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" sm="6">
-            <v-file-input accept="audio/*" label="楽曲を選択" :value="file_audio" @change="inputAudioFile" v-if="show" small-chips></v-file-input>
+            <v-file-input accept="audio/*" label="楽曲を選択" :value="file_audio" @change="inputAudioFile" v-if="show" small-chips prepend-icon="mdi-file-music-outline"></v-file-input>
           </v-col>
           <v-col cols="12" sm="6">
-            <v-file-input accept="image/*" label="画像を選択" :value="file_image" @change="inputImageFile" v-if="show" small-chips></v-file-input>
+            <v-file-input accept="image/*" label="画像を選択" :value="file_image" @change="inputImageFile" v-if="show" small-chips prepend-icon="mdi-file-image-outline"></v-file-input>
           </v-col>
         </v-row>
       </v-container>
@@ -60,8 +60,8 @@ import { mapActions } from 'vuex'
     data () {
       return {
         music: {},
-        file_image: null,
-        file_audio: null,
+        file_image: '',
+        file_audio: '',
         show: true,
       }
     },
