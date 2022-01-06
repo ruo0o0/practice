@@ -74,7 +74,7 @@ export default {
   },
   created () {
     this.music = this.$store.state.music_active
-    this.album = this.$store.state.filtered_album
+    this.album = this.$store.state.filtered_album.filter(music => music.audio_url.match(/%2F(.+)\?/)[1] !== 'undefined')
   },
   async mounted () {
     this.audio.src = this.music.audio_url
