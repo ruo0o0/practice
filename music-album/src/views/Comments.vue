@@ -67,6 +67,7 @@
             dense
             placeholder="曲名・アーティスト名"
             type="text"
+            @change="putFilteredAlbum(filteredAlbum.filter(music => music.user_id === uid))"
             >
             <template v-slot:append>
             <v-icon color="grey darken-1">mdi-magnify</v-icon>
@@ -89,8 +90,20 @@
           <div class="flex-grow">
             <p class="ml-2 mb-2">{{ profileName(music.user_id) }}</p>
             <v-card color="grey darken-4" class="ma-2">
+              <div class="flex">
+                <div>
               <v-card-title class="subtitle-1 pt-2">{{ music.title }}</v-card-title>
               <v-card-subtitle class="pt-0 pb-2">{{ music.artist }}</v-card-subtitle>
+                </div>
+                <v-spacer></v-spacer>
+                <div>
+                  <v-card-title :class="[{ 'pr-10': $vuetify.breakpoint.smAndUp }, 'pl-0']">
+                    <v-btn icon @click="play(music)" v-if="music.audio_url.match(/%2F(.+)\?/)[1] !== 'undefined' && music.user_id === uid">
+                      <v-icon large>mdi-play-circle-outline</v-icon>
+                    </v-btn>
+                  </v-card-title>
+                </div>
+              </div>
               <v-card-text class="pb-0 pt-0 mt-n2">
                 <v-textarea
                   class="mt-0"
@@ -131,9 +144,14 @@ export default {
     this.album = this.$store.state.album
     this.all_album = this.$store.state.all_album
     this.all_profile = this.$store.state.all_profile
+    this.putFilteredAlbum(this.filteredAlbum.filter(music => music.user_id === this.uid))
   },
   methods: {
-    ...mapActions(['fetchAllProfile'])
+    play (music) {
+      this.switchBarContent(music)
+      this.switchPlayerBar()
+    },
+    ...mapActions(['fetchAllProfile', 'switchBarContent', 'switchPlayerBar', 'putFilteredAlbum'])
   },
   computed: {
     artists: function () {
