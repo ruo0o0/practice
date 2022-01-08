@@ -56,6 +56,7 @@
 import firebase from 'firebase'
 import "firebase/storage"
 import { mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
   export default {
     data () {
       return {
@@ -67,10 +68,13 @@ import { mapActions } from 'vuex'
     },
     created () {
       this.music = this.$store.state.music_tmp
-      const image_url = this.music.image_url.match(/%2F(.+)\?/)[1]
-      const audio_url = this.music.audio_url.match(/%2F(.+)\?/)[1]
+      const image_url = this.music.image_url.match(/images%2F(.+)\?/)[1]
+      const audio_url = this.music.audio_url.match(/audios%2F(.+)\?/)[1]
       fetch(this.music.file_image).then(response => response.blob()).then(blob => new File([blob], image_url)).then(file => this.file_image = file)
       fetch(this.music.file_audio).then(response => response.blob()).then(blob => new File([blob], audio_url)).then(file => this.file_audio = file)
+    },
+    computed: {
+      ...mapGetters(['uid'])
     },
     methods: {
       inputImageFile (event) {
@@ -86,8 +90,8 @@ import { mapActions } from 'vuex'
         }
       },
       async fileUpdate () {
-        const storageImage = firebase.storage().ref("images/" + this.file_image.name)
-        const storageAudio = firebase.storage().ref("audios/" + this.file_audio.name)
+        const storageImage = firebase.storage().ref(`users/${this.uid}/images/` + this.file_image.name)
+        const storageAudio = firebase.storage().ref(`users/${this.uid}/audios/` + this.file_audio.name)
         const that = this
         await storageImage.getDownloadURL().then(onResolveImage, onRejectImage)
         function onResolveImage(url) {

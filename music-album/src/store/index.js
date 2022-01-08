@@ -16,6 +16,7 @@ export default new Vuex.Store({
     player_bar: false,
     key: 0,
     keyForm: 0,
+    keyNewForm: 0,
     music_active: {},
     isPlay: false,
     comment: false,
@@ -37,6 +38,7 @@ export default new Vuex.Store({
     },
     switchDialog (state) {
       state.dialog = !state.dialog
+      state.keyNewForm++
     },
     switchDialogUpdate (state) {
       state.dialog_update = !state.dialog_update
