@@ -98,7 +98,7 @@
                 <v-spacer></v-spacer>
                 <div>
                   <v-card-title :class="[{ 'pr-10': $vuetify.breakpoint.smAndUp }, 'pl-0']">
-                    <v-btn icon @click="play(music)" v-if="music.audio_url.match(/audios%2F(.+)\?/)[1] !== 'undefined' && music.user_id === uid">
+                    <v-btn icon @click="play(music)" v-if="music.audio_url && music.audio_url.match(/audios%2F(.+)\?/)[1] !== 'undefined'">
                       <v-icon large>mdi-play-circle-outline</v-icon>
                     </v-btn>
                   </v-card-title>

@@ -2,7 +2,7 @@
   <v-container text-center justify-center>
     <v-layout row wrap>
       <v-flex xs12 mt-14>
-        <h1>Musaic</h1>
+        <h1>Music Album</h1>
         <p>ご利用の方はGoogleアカウントでログインしてください</p>
       </v-flex>
 

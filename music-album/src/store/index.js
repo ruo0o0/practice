@@ -54,6 +54,10 @@ export default new Vuex.Store({
     },
     addAllMusic (state, {id, music}) {
       music.id = id
+      if (music.user_id !== state.login_user.uid) {
+        delete music.audio_url
+        delete music.image_url
+      }
       state.all_album.unshift(music)
     },
     addProfile (state, {id, profile}) {
